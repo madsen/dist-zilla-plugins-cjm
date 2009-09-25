@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-package Dist::Zilla::Plugin::CJMVersion;
+package Dist::Zilla::Plugin::TemplateCJM;
 #
 # Copyright 2009 Christopher J. Madsen
 #

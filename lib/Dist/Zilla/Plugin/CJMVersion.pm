@@ -1,5 +1,4 @@
 #---------------------------------------------------------------------
-# $Id$
 package Dist::Zilla::Plugin::CJMVersion;
 #
 # Copyright 2009 Christopher J. Madsen
@@ -23,6 +22,7 @@ our $VERSION = '0.01';
 use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::FileMunger';
+with 'Dist::Zilla::Role::ModuleInfo';
 with 'Dist::Zilla::Role::TextTemplate';
 
 sub mvp_multivalue_args { qw(file) }
@@ -88,6 +88,7 @@ sub munge_files {
      changes => $changes,
      date    => $release_date,
      dist    => $self->zilla->name,
+     meta    => $self->zilla->distmeta,
      version => $self->zilla->version,
   );
 
@@ -166,17 +167,14 @@ sub munge_file
 {
   my ($self, $file, $template, $dataRef) = @_;
 
-  my $pmFile = $file->name;
-
-  # FIXME should really use $file->content
-  my $pm_info = Module::Build::ModuleInfo->new_from_file(
-    $self->zilla->root->file( $pmFile )
-  ) or die "ERROR: Can't open $pmFile to determine version: $!";
+  # Extract information from the module:
+  my $pmFile  = $file->name;
+  my $pm_info = $self->get_module_info($file);
 
   my $version = $pm_info->version
       or die "ERROR: Can't find version in $pmFile";
 
-  # Open the module file, tying it to an array:
+  # Split the modules content, into an array:
   my @lines = split /\n/, $file->content;
 
   my $i = 0;

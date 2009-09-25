@@ -1,5 +1,4 @@
 #---------------------------------------------------------------------
-# $Id$
 package Dist::Zilla::Plugin::VersionFromModule;
 #
 # Copyright 2009 Christopher J. Madsen
@@ -22,15 +21,15 @@ our $VERSION = '0.01';
 
 use Moose;
 with 'Dist::Zilla::Role::VersionProvider';
-
-use Module::Build::ModuleInfo ();
+with 'Dist::Zilla::Role::ModuleInfo';
 
 sub provide_version {
   my ($self) = @_;
 
-  my $module = $self->zilla->root->file( $self->zilla->main_module->name );
+  my $main_module = $self->zilla->main_module;
+  my $module = $main_module->name;
 
-  my $pm_info = Module::Build::ModuleInfo->new_from_file($module)
+  my $pm_info = $self->get_module_info($main_module)
       or die "Unable to get version from $module";
 
   my $ver = $pm_info->version;

@@ -27,6 +27,12 @@ with 'Dist::Zilla::Role::TextTemplate';
 
 sub mvp_multivalue_args { qw(file) }
 
+has changelog => (
+  is   => 'ro',
+  isa  => 'Str',
+  default  => 'Changes',
+);
+
 has changes => (
   is   => 'ro',
   isa  => 'Int',
@@ -41,34 +47,6 @@ has template_files => (
   default  => sub { [ 'README' ] },
 );
 
-has format => (
-  is  => 'ro',
-  isa => 'Str', # should be more validated Later
-);
-
-#---------------------------------------------------------------------
-# Create the Text::Template for the VERSION section:
-
-sub pod_VERSION_template
-{
-  my ($self, $pmFilesRef) = @_;
-
-  my $template = $self->format;
-
-  unless (defined $template) {
-    $template = ('This document describes version {{$version}}'.
-                 ' of {{$module}}, released {{$date}}');
-
-    $template .= ' as part of {{$dist}} version {{$dist_version}}'
-        if @$pmFilesRef > 1; # this distribution contains multiple modules
-
-    $template .= '.';
-  } # end if no format specified in config
-
-  Text::Template->new(TYPE => 'STRING', SOURCE => $template,
-                      DELIMITERS => $self->delim);
-} # end pod_VERSION_template
-
 #---------------------------------------------------------------------
 # Main entry point:
 
@@ -78,8 +56,9 @@ sub munge_files {
   my $files = $self->zilla->files;
 
   # Get release date & changes from Changes file:
-  my $changesFile = $files->grep(sub{ $_->name eq 'Changes' })->head
-      or die "No Changes file\n";
+  my $changelog = $self->changelog;
+  my $changesFile = $files->grep(sub{ $_->name eq $changelog })->head
+      or die "No $changelog file\n";
 
   my ($release_date, $changes) = $self->check_Changes($changesFile);
 
@@ -90,6 +69,7 @@ sub munge_files {
      dist    => $self->zilla->name,
      meta    => $self->zilla->distmeta,
      version => $self->zilla->version,
+     zilla   => $self->zilla,
   );
 
   $data{dist_version} = $data{version};
@@ -101,13 +81,11 @@ sub munge_files {
     $file->content($self->fill_in_string($file->content, \%data));
   } # end foreach $file
 
-  # Update VERSION section in modules:
+  # Munge POD sections in modules:
   $files = $files->grep(sub { $_->name =~ /\.pm$/ and $_->name !~ m{^t/};});
 
-  my $template = $self->pod_VERSION_template($files);
-
   foreach my $file ($files->flatten) {
-    $self->munge_file($file, $template, \%data);
+    $self->munge_file($file, \%data);
   } # end foreach $file
 } # end munge_files
 
@@ -129,7 +107,7 @@ sub check_Changes
   my $list_releases = $self->changes;
 
   # Read the Changes file and find the line for dist_version:
-  open(my $Changes, '<:utf8', \$changesFile->content) or die;
+  open(my $Changes, '<', \$changesFile->content) or die;
 
   my ($release_date, $text);
 
@@ -161,11 +139,11 @@ sub check_Changes
 } # end check_Changes
 
 #---------------------------------------------------------------------
-# Update the VERSION section of a module:
+# Process all POD sections of a module as templates:
 
 sub munge_file
 {
-  my ($self, $file, $template, $dataRef) = @_;
+  my ($self, $file, $dataRef) = @_;
 
   # Extract information from the module:
   my $pmFile  = $file->name;
@@ -174,38 +152,19 @@ sub munge_file
   my $version = $pm_info->version
       or die "ERROR: Can't find version in $pmFile";
 
-  # Split the modules content, into an array:
-  my @lines = split /\n/, $file->content;
+  $self->zilla->log("Updating $pmFile: VERSION $version");
 
-  my $i = 0;
-  my $foundHeading;
+  $dataRef->{version} = "$version";
+  $dataRef->{module}  = $pm_info->name;
+  $dataRef->{pm_info} = $pm_info;
 
-  # Find the VERSION section:
-  while (defined $lines[$i] and not $lines[$i] =~ /^=head1 VERSION/) {
-    $foundHeading = 1 if not $foundHeading and $lines[$i] =~ /^=head/;
-    ++$i;
-  }
+  # Process all POD sections:
+  my $content = $file->content;
 
-  # Skip blank lines:
-  1 while defined $lines[++$i] and not $lines[$i] =~ /\S/;
+  $content =~ s{( ^=(?!cut\b)\w .*? (?: \z | ^=cut\b ) )}
+               { $self->fill_in_string($1, $dataRef) }xgems;
 
-  # Verify the section:
-  if (not defined $lines[$i]) {
-    # It's ok to have no VERSION section if you have no POD:
-    die "ERROR: $pmFile has no VERSION section\n" if $foundHeading;
-  } elsif (not $lines[$i] =~ /^This (?:section|document)/) {
-    die "ERROR: $pmFile: Unexpected line $lines[$i]";
-  } else {
-    print "Updating $pmFile: VERSION $version\n";
-
-    $dataRef->{version} = "$version";
-    $dataRef->{module}  = $pm_info->name;
-
-    $lines[$i] = $template->fill_in(HASH => $dataRef)
-        or die "TEMPLATE ERROR: " . $Text::Template::ERROR;
-  }
-
-  $file->content(join "\n", @lines);
+  $file->content($content);
 
   return;
 } # end munge_file

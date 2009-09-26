@@ -74,18 +74,25 @@ sub munge_files {
 
   $data{dist_version} = $data{version};
 
+  my %parms = (
+    STRICT => 1,
+    BROKEN => sub { $self->template_error(@_) },
+  );
+
   my $any = $self->template_files->any;
 
   foreach my $file ($files->grep(sub { $_->name eq $any })->flatten) {
     printf "Processing %s\n", $file->name;
-    $file->content($self->fill_in_string($file->content, \%data));
+    $self->_cur_filename($file->name);
+    $self->_cur_offset(0);
+    $file->content($self->fill_in_string($file->content, \%data, \%parms));
   } # end foreach $file
 
   # Munge POD sections in modules:
   $files = $files->grep(sub { $_->name =~ /\.pm$/ and $_->name !~ m{^t/};});
 
   foreach my $file ($files->flatten) {
-    $self->munge_file($file, \%data);
+    $self->munge_file($file, \%data, \%parms);
   } # end foreach $file
 } # end munge_files
 
@@ -143,7 +150,7 @@ sub check_Changes
 
 sub munge_file
 {
-  my ($self, $file, $dataRef) = @_;
+  my ($self, $file, $dataRef, $parmsRef) = @_;
 
   # Extract information from the module:
   my $pmFile  = $file->name;
@@ -158,16 +165,63 @@ sub munge_file
   $dataRef->{module}  = $pm_info->name;
   $dataRef->{pm_info} = $pm_info;
 
+  $parmsRef->{FILENAME} = $pmFile;
+
   # Process all POD sections:
   my $content = $file->content;
 
+  $self->_cur_filename($pmFile);
+  $self->_cur_content(\$content);
+
   $content =~ s{( ^=(?!cut\b)\w .*? (?: \z | ^=cut\b ) )}
-               { $self->fill_in_string($1, $dataRef) }xgems;
+               {
+                 $self->_cur_offset($-[0]);
+                 $self->fill_in_string($1, $dataRef, $parmsRef)
+               }xgems;
 
   $file->content($content);
+  $self->_cur_content(undef);
 
   return;
 } # end munge_file
+
+#---------------------------------------------------------------------
+# Report a template error and die:
+
+has _cur_filename => (
+  is   => 'rw',
+  isa  => 'Str',
+);
+
+# This is a reference to the text we're processing templates in
+has _cur_content => (
+  is   => 'rw',
+  isa  => 'Maybe[ScalarRef]',
+);
+
+# This is the position in _cur_content where this template began
+has _cur_offset => (
+  is   => 'rw',
+  isa  => 'Int',
+);
+
+sub template_error
+{
+  my ($self, %e) = @_;
+
+  # Calculate the line number where the template started:
+  my $offset = $self->_cur_offset;
+  if ($offset) {
+    $offset = substr(${ $self->_cur_content }, 0, $offset) =~ tr/\n//;
+  }
+
+  # Put the filename & line number into the error message:
+  my $err = $e{error};
+  my $fn  = $self->_cur_filename;
+  $err =~ s/ at template line (\d+)/ " at $fn line " . ($1 + $offset) /eg;
+
+  die $err;
+} # end template_error
 
 #---------------------------------------------------------------------
 __PACKAGE__->meta->make_immutable;

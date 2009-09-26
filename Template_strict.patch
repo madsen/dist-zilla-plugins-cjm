@@ -1,0 +1,60 @@
+--- lib/Text/Template.pm	2008-04-16 18:38:08.000000000 -0500
++++ lib/Text/Template.pm	2009-09-25 18:32:31.523921630 -0500
+@@ -255,6 +255,7 @@
+   my $fi_eval_package;
+   my $fi_scrub_package = 0;
+   my $fi_filename = _param('filename') || $fi_self->{FILENAME} || 'template';
++  my $fi_strict = _param('strict', %fi_a);
+ 
+   my $fi_prepend = _param('prepend', %fi_a);
+   unless (defined $fi_prepend) {
+@@ -272,6 +273,7 @@
+     $fi_eval_package = caller;
+   }
+ 
++  my @fi_varlist;
+   my $fi_install_package;
+   if (defined $fi_varhash) {
+     if (defined $fi_package) {
+@@ -281,7 +283,12 @@
+     } else {
+       $fi_install_package = $fi_eval_package; # The gensymmed one
+     }
+-    _install_hash($fi_varhash => $fi_install_package);
++    @fi_varlist = _install_hash($fi_varhash => $fi_install_package);
++  }
++
++  if ($fi_strict) {
++    $fi_prepend = "use vars qw(@fi_varlist);$fi_prepend" if @fi_varlist;
++    $fi_prepend = "use strict;$fi_prepend";
+   }
+ 
+   if (defined $fi_package && defined $fi_safe) {
+@@ -441,6 +448,7 @@
+     $hashlist = [$hashlist];
+   }
+   my $hash;
++  my @varlist;
+   foreach $hash (@$hashlist) {
+     my $name;
+     foreach $name (keys %$hash) {
+@@ -449,13 +457,19 @@
+       local *SYM = *{"$ {dest}::$name"};
+       if (! defined $val) {
+ 	delete ${"$ {dest}::"}{$name};
++	my $match = qr/^.\Q$name\E$/;
++	@varlist = grep { $_ !~ $match } @varlist;
+       } elsif (ref $val) {
+ 	*SYM = $val;
++	push @varlist, (UNIVERSAL::isa($val, 'ARRAY') ? '@' : '%') . $name;
+       } else {
+  	*SYM = \$val;
++	push @varlist, '$' . $name;
+       }
+     }
+   }
++
++  @varlist;
+ }
+ 
+ sub TTerror { $ERROR }

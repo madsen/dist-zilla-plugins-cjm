@@ -14,7 +14,7 @@ package Dist::Zilla::Plugin::VersionFromModule;
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See either the
 # GNU General Public License or the Artistic License for more details.
 #
-# Get distribution version from its main_module
+# ABSTRACT: Get distribution version from its main_module
 #---------------------------------------------------------------------
 
 our $VERSION = '0.01';
@@ -23,16 +23,24 @@ use Moose;
 with 'Dist::Zilla::Role::VersionProvider';
 with 'Dist::Zilla::Role::ModuleInfo';
 
+=head1 DESCRIPTION
+
+If included, this plugin will set the distribution's version from the
+C<main_module>'s version.  (You should not specify a version in your
+F<dist.ini>.)
+
+=cut
+
 sub provide_version {
   my ($self) = @_;
 
   my $main_module = $self->zilla->main_module;
   my $module = $main_module->name;
 
-  my $pm_info = $self->get_module_info($main_module)
-      or die "Unable to get version from $module";
+  my $pm_info = $self->get_module_info($main_module);
+  my $ver     = $pm_info->version;
 
-  my $ver = $pm_info->version;
+  die "Unable to get version from $module" unless defined $ver;
 
   $self->zilla->log("dist version $ver (from $module)");
 

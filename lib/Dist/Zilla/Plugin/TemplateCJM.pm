@@ -14,7 +14,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See either the
 # GNU General Public License or the Artistic License for more details.
 #
-# Copy module version numbers to secondary locations
+# ABSTRACT: Copy module version numbers to secondary locations
 #---------------------------------------------------------------------
 
 our $VERSION = '0.01';
@@ -27,17 +27,41 @@ with 'Dist::Zilla::Role::TextTemplate';
 
 sub mvp_multivalue_args { qw(file) }
 
+=attr changelog
+
+This is the name of the F<Changes> file.  It defaults to F<Changes>.
+
+=cut
+
 has changelog => (
   is   => 'ro',
   isa  => 'Str',
   default  => 'Changes',
 );
 
+=attr changes
+
+This is the number of releases to include in the C<$changes> variable
+passed to templates.  It defaults to 1 (meaning only changes in the
+current release).  This is useful when you make a major release
+immediately followed by a bugfix release.
+
+=cut
+
 has changes => (
   is   => 'ro',
   isa  => 'Int',
   default  => 1,
 );
+
+=attr file
+
+This is the name of a file to process with Text::Template in step 2.
+The C<file> attribute may be listed any number of times.  If you don't
+list any C<file>s, it defaults to F<README>.  If you do specify any
+C<file>s, then F<README> is not processed unless explicitly specified.
+
+=cut
 
 has template_files => (
   is   => 'ro',
@@ -227,3 +251,92 @@ sub template_error
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
+
+__END__
+
+=head1 DESCRIPTION
+
+This plugin is the successor to L<Module::Build::DistVersion>.
+It performs the following actions:
+
+=over
+
+=item 1.
+
+It opens the F<Changes> file, and finds the first version listed.  The
+line must begin with the version number, and everything after the
+version number is considered to be the release date.  The version
+number from Changes must match Dist::Zilla's idea of the
+distribution version, or the process stops here with an error.
+
+=item 2.
+
+It processes each template file with Text::Template.  Template files
+are specified with the L<< C<file> attribute|/"file" >>.  Any number of
+templates may be present.
+
+Each template may use the following variables:
+
+=over
+
+=item C<$changes>
+
+The changes in the current release.  This is a string containing all
+lines in F<Changes> following the version/release date line up to (but
+not including) the next line that begins with a non-whitespace
+character (or end-of-file).
+
+You can include the changes from more than one release by setting the
+L<< C<changes> attribute/"changes" >>.  This is useful when you make a
+major release immediately followed by a bugfix release.
+
+=item C<$date>
+
+The release date as it appeared in F<Changes>.
+
+=item C<$dist>
+
+The name of the distribution.
+
+=item C<$meta>
+
+The hash of metadata that will be stored in F<META.yml>.
+
+=item C<$version>
+
+The distribution's version number.  (Also available as C<$dist_version>.)
+
+=item C<$zilla>
+
+The Dist::Zilla object that is creating the distribution.
+
+=back
+
+=item 3.
+
+It finds each F<.pm> file (except those in the F<t> directory, if
+any).  For each file, it processes each POD section through Text::Template.
+
+Each POD section may use the same variables as step 2, plus the following:
+
+=over
+
+=item C<$module>
+
+The name of the module being processed (i.e., its package).
+
+=item C<$pm_info>
+
+A Module::Build::ModuleInfo object containing information about the
+module.  (Note that the filename in C<$pm_info> will not be correct.)
+
+=item C<$version>
+
+The module's version number.  This may be different than the
+distribution's version, which is available as C<$dist_version>.
+
+=back
+
+=back
+
+=cut

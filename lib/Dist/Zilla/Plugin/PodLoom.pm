@@ -77,7 +77,7 @@ sub munge_file
       dist           => $self->zilla->name,
       license_notice => $self->zilla->license->notice,
       module         => $info->name,
-      version        => $info->version,
+      version        => q{} . $info->version, # stringify version
       zilla          => $self->zilla,
     }, $self->data,
   );

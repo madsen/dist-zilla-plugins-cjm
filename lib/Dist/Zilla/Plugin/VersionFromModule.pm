@@ -50,8 +50,11 @@ sub provide_version {
 #=====================================================================
 # Package Return Value:
 
-__PACKAGE__->meta->make_immutable;
 no Moose;
+__PACKAGE__->meta->make_immutable;
 1;
 
 __END__
+
+=for Pod::Loom-omit
+CONFIGURATION AND ENVIRONMENT

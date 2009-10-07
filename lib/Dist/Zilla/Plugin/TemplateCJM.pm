@@ -248,8 +248,8 @@ sub template_error
 } # end template_error
 
 #---------------------------------------------------------------------
-__PACKAGE__->meta->make_immutable;
 no Moose;
+__PACKAGE__->meta->make_immutable;
 1;
 
 __END__
@@ -338,5 +338,8 @@ distribution's version, which is available as C<$dist_version>.
 =back
 
 =back
+
+=for Pod::Loom-omit
+CONFIGURATION AND ENVIRONMENT
 
 =cut

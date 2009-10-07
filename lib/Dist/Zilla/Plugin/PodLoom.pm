@@ -49,10 +49,11 @@ has data => (
 );
 
 has loom => (
-  is      => 'ro',
-  isa     => 'Pod::Loom',
-  lazy    => 1,
-  default => sub { Pod::Loom->new(template => shift->template) },
+  is       => 'ro',
+  isa      => 'Pod::Loom',
+  init_arg => undef,
+  lazy     => 1,
+  default  => sub { Pod::Loom->new(template => shift->template) },
 );
 
 sub _initialize_data

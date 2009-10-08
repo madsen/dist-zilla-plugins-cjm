@@ -1,0 +1,8 @@
+Revision history for Dist-Zilla-PluginBundle-CJM
+
+0.01   NOT YET
+	- Initial release includes:
+	  Dist::Zilla::Plugin::PodLoom
+	  Dist::Zilla::Plugin::TemplateCJM
+	  Dist::Zilla::Plugin::VersionFromModule
+	  Dist::Zilla::Role::ModuleInfo

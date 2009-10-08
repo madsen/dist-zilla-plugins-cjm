@@ -56,5 +56,10 @@ __PACKAGE__->meta->make_immutable;
 
 __END__
 
+=head1 INCOMPATIBILITIES
+
+Since it will always return a version, VersionFromModule should not be
+used with any other VersionProvider plugins.
+
 =for Pod::Loom-omit
 CONFIGURATION AND ENVIRONMENT

@@ -80,6 +80,10 @@ C<< $zilla->license->notice >>
 
 The primary package of the file being processed
 
+=item repository
+
+C<< $zilla->distmeta->{resources}{repository} >>
+
 =item version
 
 The version number of the file being processed
@@ -152,6 +156,7 @@ sub munge_file
       dist           => $self->zilla->name,
       license_notice => $self->zilla->license->notice,
       module         => $info->name,
+      repository     => $self->zilla->distmeta->{resources}{repository},
       version        => q{} . $info->version, # stringify version
       zilla          => $self->zilla,
     }, $self->data,

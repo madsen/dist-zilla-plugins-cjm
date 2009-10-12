@@ -14,10 +14,19 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See either the
 # GNU General Public License or the Artistic License for more details.
 #
-# ABSTRACT: Copy module version numbers to secondary locations
+# ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
 our $VERSION = '0.01';
+
+=head1 DEPENDENCIES
+
+TemplateCJM requires L<Dist::Zilla> 1.092680 or later and
+L<Text::Template>.  I also recommend applying F<Template_strict.patch>
+to Text::Template.  This will add support for the STRICT option, which
+will help catch errors in your templates.
+
+=cut
 
 use Moose;
 use Moose::Autobox;
@@ -98,6 +107,10 @@ sub munge_files {
 
   $data{dist_version} = $data{version};
 
+  # The STRICT option hasn't been implemented in a released version of
+  # Text::Template, but you can apply Template_strict.patch.  Since
+  # Text::Template ignores unknown options, this code will still work
+  # even if you don't apply the patch; you just won't get strict checking.
   my %parms = (
     STRICT => 1,
     BROKEN => sub { $self->template_error(@_) },

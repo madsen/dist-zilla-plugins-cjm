@@ -1,8 +1,8 @@
 Revision history for Dist-Zilla-PluginBundle-CJM
 
-0.01   NOT YET
+0.01   October 11, 2009
 	- Initial release includes:
-	  Dist::Zilla::Plugin::PodLoom
-	  Dist::Zilla::Plugin::TemplateCJM
-	  Dist::Zilla::Plugin::VersionFromModule
-	  Dist::Zilla::Role::ModuleInfo
+	    Dist::Zilla::Plugin::PodLoom
+	    Dist::Zilla::Plugin::TemplateCJM
+	    Dist::Zilla::Plugin::VersionFromModule
+	    Dist::Zilla::Role::ModuleInfo

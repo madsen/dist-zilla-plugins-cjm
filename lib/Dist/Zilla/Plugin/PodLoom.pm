@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::PodLoom;
 # ABSTRACT: Process module documentation through Pod::Loom
 #---------------------------------------------------------------------
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 DESCRIPTION
 
@@ -62,7 +62,7 @@ values.)
 
 =item abstract
 
-The abstract for the file being processed
+The abstract for the file being processed (if it can be determined)
 
 =item authors
 
@@ -79,6 +79,7 @@ C<< $zilla->license->notice >>
 =item module
 
 The primary package of the file being processed
+(if Module::Build::ModuleInfo could determine it)
 
 =item repository
 
@@ -87,6 +88,7 @@ C<< $zilla->distmeta->{resources}{repository} >>
 =item version
 
 The version number of the file being processed
+(if Module::Build::ModuleInfo could determine it)
 
 =item zilla
 
@@ -149,15 +151,18 @@ sub munge_file
 
   my $info = $self->get_module_info($file);
 
+  my $abstract = Dist::Zilla::Util->abstract_from_file($file->name);
+
   my $dataHash = Hash::Merge::Simple::merge(
     {
-      abstract       => Dist::Zilla::Util->abstract_from_file($file->name),
+      ($abstract ? (abstract => $abstract) : ()),
       authors        => $self->zilla->authors,
       dist           => $self->zilla->name,
       license_notice => $self->zilla->license->notice,
-      module         => $info->name,
+      ($info->name ? (module => $info->name) : ()),
       repository     => $self->zilla->distmeta->{resources}{repository},
-      version        => q{} . $info->version, # stringify version
+      # Have to stringify version object:
+      ($info->version ? (version => q{} . $info->version) : ()),
       zilla          => $self->zilla,
     }, $self->data,
   );

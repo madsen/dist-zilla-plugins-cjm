@@ -17,7 +17,7 @@ package Dist::Zilla::PluginBundle::CJM;
 # ABSTRACT: Build a distribution like CJM
 #---------------------------------------------------------------------
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Moose;
 #use Moose::Autobox;
@@ -36,3 +36,8 @@ sub bundle_config {
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
+
+__END__
+
+=for Pod::Coverage
+bundle_config

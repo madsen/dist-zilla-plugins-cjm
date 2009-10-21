@@ -177,3 +177,6 @@ __END__
 
 =for Pod::Loom-omit
 CONFIGURATION AND ENVIRONMENT
+
+=for Pod::Coverage
+munge_file

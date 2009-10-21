@@ -63,3 +63,6 @@ used with any other VersionProvider plugins.
 
 =for Pod::Loom-omit
 CONFIGURATION AND ENVIRONMENT
+
+=for Pod::Coverage
+provide_version

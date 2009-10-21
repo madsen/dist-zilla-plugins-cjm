@@ -355,4 +355,11 @@ distribution's version, which is available as C<$dist_version>.
 =for Pod::Loom-omit
 CONFIGURATION AND ENVIRONMENT
 
+=for Pod::Coverage
+check_Changes
+munge_file
+munge_files
+mvp_multivalue_args
+template_error
+
 =cut

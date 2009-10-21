@@ -1,5 +1,8 @@
 Revision history for Dist-Zilla-PluginBundle-CJM
 
+0.02   NOT
+	- Added POD tests
+
 0.01   October 11, 2009
 	- Initial release includes:
 	    Dist::Zilla::Plugin::PodLoom

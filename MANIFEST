@@ -1,0 +1,14 @@
+Changes
+LICENSE
+MANIFEST
+META.yml
+Makefile.PL
+README
+Template_strict.patch
+lib/Dist/Zilla/Plugin/PodLoom.pm
+lib/Dist/Zilla/Plugin/TemplateCJM.pm
+lib/Dist/Zilla/Plugin/VersionFromModule.pm
+lib/Dist/Zilla/PluginBundle/CJM.pm
+lib/Dist/Zilla/Role/ModuleInfo.pm
+t/release-pod-coverage.t
+t/release-pod-syntax.t

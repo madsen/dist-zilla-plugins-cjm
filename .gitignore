@@ -1,4 +1,5 @@
 /blib/
+/.build/
 Makefile
 /pm_to_blib
 Dist-Zilla-PluginBundle-CJM-*.tar.gz

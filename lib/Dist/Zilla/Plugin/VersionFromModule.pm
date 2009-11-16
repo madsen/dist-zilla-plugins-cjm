@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::VersionFromModule;
 # ABSTRACT: Get distribution version from its main_module
 #---------------------------------------------------------------------
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Moose;
 with 'Dist::Zilla::Role::VersionProvider';

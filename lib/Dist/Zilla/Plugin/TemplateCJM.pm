@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 DEPENDENCIES
 

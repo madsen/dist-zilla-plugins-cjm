@@ -46,21 +46,12 @@ sub munge_files {
   my %released = map { /^v?([\d._]+)$/ ? ($1, 1) : () } $git->command('tag');
 
   # Get the list of modified but not-checked-in files:
-  my %modified;
-  {
-    my ($fh, $ctx) = $git->command_output_pipe('status');
-    my $untracked;
-
-    while (<$fh>) {
-      $untracked = 1 if /^# Untracked files:/;
-
-      $modified{$1} = 1
-          if /^#\s*(?:modified|new file):\s*(\S.*)/
-          or ($untracked and /^#\t\s*(\S.*)/);
-    }
-    # Status returns non-zero if there's nothing to check in:
-    eval { $git->command_close_pipe($fh, $ctx) };
-  }
+  my %modified = map { $_ => 1 } (
+    # Files that need to be committed:
+    split(/\0/, scalar $git->command(qw( diff-index -z HEAD --name-only ))),
+    # Files that are not tracked by git yet:
+    split(/\0/, scalar $git->command(qw( ls-files -oz --exclude-standard ))),
+  );
 
   # Get the list of modules:
   my $files = $self->zilla->files->grep(

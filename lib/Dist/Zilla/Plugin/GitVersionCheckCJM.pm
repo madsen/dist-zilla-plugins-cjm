@@ -68,7 +68,7 @@ sub munge_files {
 } # end munge_files
 
 #---------------------------------------------------------------------
-# Process all POD sections of a module as templates:
+# Check the version of a module:
 
 sub munge_file
 {
@@ -81,20 +81,27 @@ sub munge_file
   my $version = $pm_info->version
       or die "ERROR: Can't find version in $pmFile";
 
+  # If module version matches dist version, it's current:
+  #   (unless that dist has already been released)
   if ($version eq $self->zilla->version) {
     return unless $releasedRef->{$version};
   }
 
+  # If the module hasn't been committed yet, it needs updating:
+  #   (since it doesn't match the dist version)
   if ($modifiedRef->{$pmFile}) {
     $self->zilla->log("ERROR: $pmFile: $version needs to be updated");
     return 1;
   }
 
+  # If the module's version doesn't match the dist, and that version
+  # hasn't been released, that's a problem:
   unless ($releasedRef->{$version}) {
     $self->zilla->log("ERROR: $pmFile: $version does not seem to have been released, but is not current");
     return 1;
   }
 
+  # See if we checked in the module without updating the version:
   my $lastChangedRev = $git->command_oneline(
     qw(rev-list -n1 HEAD --) => $pmFile
   );
@@ -104,6 +111,7 @@ sub munge_file
     $lastChangedRev
   );
 
+  # We're ok if the last change was part of the indicated release:
   return if $inRelease =~ m! tags/\Q$version\E!;
 
   $self->zilla->log("ERROR: $pmFile: $version needs to be updated");

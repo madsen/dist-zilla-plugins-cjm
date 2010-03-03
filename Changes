@@ -10,6 +10,9 @@ Revision history for Dist-Zilla-PluginBundle-CJM
 	  - Define abstract, module, & version only if they
 	    could be determined
 
+	Dist::Zilla::Plugin::TemplateCJM
+	  - Also process comments that start at beginning of line
+
 0.01   October 11, 2009
 	- Initial release includes:
 	    Dist::Zilla::Plugin::PodLoom

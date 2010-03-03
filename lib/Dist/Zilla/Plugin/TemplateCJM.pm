@@ -216,6 +216,13 @@ sub munge_file
                  $self->fill_in_string($1, $dataRef, $parmsRef)
                }xgems;
 
+  # And comments at BOL:
+  $content =~ s{( ^\#.+ )}
+               {
+                 $self->_cur_offset($-[0]);
+                 $self->fill_in_string($1, $dataRef, $parmsRef)
+               }xgem;
+
   $file->content($content);
   $self->_cur_content(undef);
 
@@ -328,9 +335,10 @@ The Dist::Zilla object that is creating the distribution.
 =item 3.
 
 It finds each F<.pm> file (except those in the F<t> directory, if
-any).  For each file, it processes each POD section through Text::Template.
+any).  For each file, it processes each POD section and each comment
+that starts at the beginning of a line through Text::Template.
 
-Each POD section may use the same variables as step 2, plus the following:
+Each section may use the same variables as step 2, plus the following:
 
 =over
 

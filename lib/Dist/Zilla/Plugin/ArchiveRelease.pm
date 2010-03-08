@@ -19,6 +19,7 @@ package Dist::Zilla::Plugin::ArchiveRelease;
 
 use 5.008;
 our $VERSION = '0.02';
+# This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DESCRIPTION
 

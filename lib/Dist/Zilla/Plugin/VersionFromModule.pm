@@ -18,6 +18,7 @@ package Dist::Zilla::Plugin::VersionFromModule;
 #---------------------------------------------------------------------
 
 our $VERSION = '0.02';
+# This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 use Moose;
 with 'Dist::Zilla::Role::VersionProvider';

@@ -18,6 +18,7 @@ package Dist::Zilla::Plugin::PodLoom;
 #---------------------------------------------------------------------
 
 our $VERSION = '0.02';
+# This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DESCRIPTION
 

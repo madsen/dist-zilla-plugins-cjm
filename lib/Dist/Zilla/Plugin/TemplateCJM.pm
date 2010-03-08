@@ -178,7 +178,7 @@ sub check_Changes
   # Report the results:
   die "ERROR: Can't find any versions in $file" unless $release_date;
 
-  $self->zilla->log("Version $version released $release_date\n$text");
+  $self->log("Version $version released $release_date\n$text");
 
   return ($release_date, $text);
 } # end check_Changes
@@ -197,7 +197,7 @@ sub munge_file
   my $version = $pm_info->version
       or die "ERROR: Can't find version in $pmFile";
 
-  $self->zilla->log("Updating $pmFile: VERSION $version");
+  $self->log("Updating $pmFile: VERSION $version");
 
   $dataRef->{version} = "$version";
   $dataRef->{module}  = $pm_info->name;

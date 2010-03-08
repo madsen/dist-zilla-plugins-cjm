@@ -43,7 +43,7 @@ sub provide_version {
 
   die "Unable to get version from $module" unless defined $ver;
 
-  $self->zilla->log("dist version $ver (from $module)");
+  $self->log("dist version $ver (from $module)");
 
   "$ver";                       # Need to stringify version object
 } # end provide_version

@@ -66,7 +66,7 @@ sub release
 
   rename $tgz, $dest;
 
-  $self->zilla->log("Moved archive to $dest");
+  $self->log("Moved archive to $dest");
 } # end release
 
 #---------------------------------------------------------------------

@@ -91,14 +91,14 @@ sub munge_file
   # If the module hasn't been committed yet, it needs updating:
   #   (since it doesn't match the dist version)
   if ($modifiedRef->{$pmFile}) {
-    $self->zilla->log("ERROR: $pmFile: $version needs to be updated");
+    $self->log("ERROR: $pmFile: $version needs to be updated");
     return 1;
   }
 
   # If the module's version doesn't match the dist, and that version
   # hasn't been released, that's a problem:
   unless ($releasedRef->{$version}) {
-    $self->zilla->log("ERROR: $pmFile: $version does not seem to have been released, but is not current");
+    $self->log("ERROR: $pmFile: $version does not seem to have been released, but is not current");
     return 1;
   }
 
@@ -115,7 +115,7 @@ sub munge_file
   # We're ok if the last change was part of the indicated release:
   return if $inRelease =~ m! tags/\Q$version\E!;
 
-  $self->zilla->log("ERROR: $pmFile: $version needs to be updated");
+  $self->log("ERROR: $pmFile: $version needs to be updated");
   return 1;
 } # end munge_file
 

@@ -18,7 +18,7 @@ package Dist::Zilla::Plugin::ArchiveRelease;
 #---------------------------------------------------------------------
 
 use 5.008;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DESCRIPTION
@@ -66,7 +66,7 @@ sub release
 
   rename $tgz, $dest;
 
-  $self->log("Moved archive to $dest");
+  $self->log("Moved to $dest");
 } # end release
 
 #---------------------------------------------------------------------

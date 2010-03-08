@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-PluginBundle-CJM
 
-0.02   NOT
+0.02   March 7, 2010
 	- Added POD tests
 	- Use the plugin's log method so the plugin name appears in the log
 

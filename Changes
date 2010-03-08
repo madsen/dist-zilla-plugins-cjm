@@ -3,8 +3,9 @@ Revision history for Dist-Zilla-PluginBundle-CJM
 0.02   NOT
 	- Added POD tests
 
+	Dist::Zilla::Plugin::ArchiveRelease
 	Dist::Zilla::Plugin::GitVersionCheckCJM
-	  - New plugin
+	  - New plugins
 
 	Dist::Zilla::Plugin::PodLoom
 	  - Define abstract, module, & version only if they

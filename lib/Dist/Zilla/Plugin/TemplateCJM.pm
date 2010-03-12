@@ -31,7 +31,7 @@ will help catch errors in your templates.
 
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::FileMunger';
+with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::ModuleInfo';
 with 'Dist::Zilla::Role::TextTemplate';
 
@@ -84,7 +84,7 @@ has template_files => (
 #---------------------------------------------------------------------
 # Main entry point:
 
-sub munge_files {
+sub setup_installer {
   my ($self) = @_;
 
   my $files = $self->zilla->files;
@@ -132,7 +132,7 @@ sub munge_files {
   foreach my $file ($files->flatten) {
     $self->munge_file($file, \%data, \%parms);
   } # end foreach $file
-} # end munge_files
+} # end setup_installer
 
 #---------------------------------------------------------------------
 # Make sure that we've listed this release in Changes:
@@ -201,7 +201,7 @@ sub munge_file
 
   $dataRef->{version} = "$version";
   $dataRef->{module}  = $pm_info->name;
-  $dataRef->{pm_info} = $pm_info;
+  $dataRef->{pm_info} = \$pm_info;
 
   $parmsRef->{FILENAME} = $pmFile;
 
@@ -367,8 +367,8 @@ CONFIGURATION AND ENVIRONMENT
 =for Pod::Coverage
 check_Changes
 munge_file
-munge_files
 mvp_multivalue_args
+setup_installer
 template_error
 
 =cut

@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DEPENDENCIES
@@ -103,7 +103,7 @@ sub munge_files {
      dist    => $self->zilla->name,
      meta    => $self->zilla->distmeta,
      version => $self->zilla->version,
-     zilla   => $self->zilla,
+     zilla   => \$self->zilla,
   );
 
   $data{dist_version} = $data{version};
@@ -120,7 +120,7 @@ sub munge_files {
   my $any = $self->template_files->any;
 
   foreach my $file ($files->grep(sub { $_->name eq $any })->flatten) {
-    printf "Processing %s\n", $file->name;
+    $self->log('Processing ' . $file->name);
     $self->_cur_filename($file->name);
     $self->_cur_offset(0);
     $file->content($self->fill_in_string($file->content, \%data, \%parms));

@@ -1,6 +1,9 @@
 Revision history for Dist-Zilla-PluginBundle-CJM
 
 0.03   NOT
+	- Includes a new version of Template_strict.patch that
+	  supports scalar references properly
+
 	Dist::Zilla::Plugin::ArchiveRelease
 	  - Shortened log message
 

@@ -3,7 +3,7 @@ This automatically prepends 'use strict' to your template code, but
 still allows you to use variables defined by the HASH option.
 
 --- lib/Text/Template.pm	2008-04-16 18:38:08.000000000 -0500
-+++ lib/Text/Template.pm	2009-09-25 18:32:31.523921630 -0500
++++ lib/Text/Template.pm	2010-03-12 12:21:31.416024029 -0600
 @@ -255,6 +255,7 @@
    my $fi_eval_package;
    my $fi_scrub_package = 0;
@@ -42,7 +42,7 @@ still allows you to use variables defined by the HASH option.
    foreach $hash (@$hashlist) {
      my $name;
      foreach $name (keys %$hash) {
-@@ -449,13 +457,19 @@
+@@ -449,13 +457,23 @@
        local *SYM = *{"$ {dest}::$name"};
        if (! defined $val) {
  	delete ${"$ {dest}::"}{$name};
@@ -50,7 +50,11 @@ still allows you to use variables defined by the HASH option.
 +	@varlist = grep { $_ !~ $match } @varlist;
        } elsif (ref $val) {
  	*SYM = $val;
-+	push @varlist, (UNIVERSAL::isa($val, 'ARRAY') ? '@' : '%') . $name;
++        push @varlist, do {
++          if    (UNIVERSAL::isa($val, 'ARRAY')) { '@' }
++          elsif (UNIVERSAL::isa($val, 'HASH'))  { '%' }
++          else                                  { '$' }
++        } . $name;
        } else {
   	*SYM = \$val;
 +	push @varlist, '$' . $name;

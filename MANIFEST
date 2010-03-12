@@ -6,6 +6,7 @@ Makefile.PL
 README
 Template_strict.patch
 lib/Dist/Zilla/Plugin/ArchiveRelease.pm
+lib/Dist/Zilla/Plugin/CustomModuleBuild.pm
 lib/Dist/Zilla/Plugin/GitVersionCheckCJM.pm
 lib/Dist/Zilla/Plugin/PodLoom.pm
 lib/Dist/Zilla/Plugin/TemplateCJM.pm

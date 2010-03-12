@@ -7,6 +7,9 @@ Revision history for Dist-Zilla-PluginBundle-CJM
 	Dist::Zilla::Plugin::ArchiveRelease
 	  - Shortened log message
 
+	Dist::Zilla::Plugin::CustomModuleBuild
+	  - New plugin
+
 0.02   March 7, 2010
 	- Added POD tests
 	- Use the plugin's log method so the plugin name appears in the log

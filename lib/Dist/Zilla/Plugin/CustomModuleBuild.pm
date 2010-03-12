@@ -43,6 +43,38 @@ sub prune_files {
   return;
 } # end prune_files
 
+sub get_meta
+{
+  my $self = shift;
+
+  # Extract the wanted keys from distmeta:
+  my $distmeta = $self->zilla->distmeta;
+  my %want;
+
+  foreach my $key (@_) {
+    $want{$key} = $distmeta->{$key} if %{ $distmeta->{$key} || {} };
+  } # end foreach $key
+
+  # Format them for inclusion:
+  my $data = Data::Dumper->new([ \%want ])
+      ->Indent(1)->Sortkeys(1)->Terse(1)->Dump;
+
+  if ($data eq "{}\n") {
+    $data = '';
+  } else {
+    $data =~ s/^\{\n//     or die "Dump prefix! $data";
+    $data =~ s/\n\}\n\z/,/ or die "Dump postfix! $data";
+  }
+
+  return $data;
+} # end get_meta
+
+sub get_prereqs
+{
+  shift->get_meta(qw(build_requires configure_requires requires recommends
+                     conflicts));
+} # end get_prereqs
+
 sub setup_installer
 {
   my $self = shift;
@@ -50,27 +82,8 @@ sub setup_installer
   my $file = $self->zilla->files->grep(sub { $_->name eq 'Build.PL' })->head
       or $self->log_fatal("No Build.PL found in dist");
 
-  # Extract the prerequisites from distmeta:
-  my $distmeta = $self->zilla->distmeta;
-  my $meta = {};
-
-  foreach my $type (qw(build_requires configure_requires requires recommends )) {
-    $meta->{$type} = $distmeta->{$type} if %{ $distmeta->{$type} || {} };
-  } # end foreach $type
-
-  # Format prerequisites for inclusion:
-  my $prereqs = Data::Dumper->new([ $meta ])->Indent(1)->Terse(1)->Dump;
-
-  if ($prereqs eq "{}\n") {
-    $prereqs = '';
-  } else {
-    $prereqs =~ s/^\{\n//     or die "Dump prefix! $prereqs";
-    $prereqs =~ s/\n\}\n\z/,/ or die "Dump postfix! $prereqs";
-  }
-
   # Process Build.PL through Text::Template:
   my %data = (
-     prereqs => $prereqs,
      dist    => $self->zilla->name,
      meta    => $self->zilla->distmeta,
      plugin  => \$self,

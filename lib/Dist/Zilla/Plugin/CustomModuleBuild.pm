@@ -26,6 +26,7 @@ extends 'Dist::Zilla::Plugin::ModuleBuild';
 with 'Dist::Zilla::Role::FilePruner';
 
 use Data::Dumper ();
+use Scalar::Util 'reftype';
 
 # We're trying to make the template executable before it's filled in,
 # so we want delimiters that look like comments:
@@ -52,7 +53,15 @@ sub get_meta
   my %want;
 
   foreach my $key (@_) {
-    $want{$key} = $distmeta->{$key} if %{ $distmeta->{$key} || {} };
+    next unless defined $distmeta->{$key};
+
+    # Skip keys with empty value:
+    my $reftype = reftype($distmeta->{$key});
+    if (not $reftype) {}
+    elsif ($reftype eq 'HASH')  { next unless %{ $distmeta->{$key} } }
+    elsif ($reftype eq 'ARRAY') { next unless @{ $distmeta->{$key} } }
+
+    $want{$key} = $distmeta->{$key};
   } # end foreach $key
 
   # Format them for inclusion:

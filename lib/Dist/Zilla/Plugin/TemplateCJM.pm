@@ -22,7 +22,7 @@ our $VERSION = '0.03';
 
 =head1 DEPENDENCIES
 
-TemplateCJM requires L<Dist::Zilla> 1.092680 or later and
+TemplateCJM requires {{$t->dependency_link('Dist::Zilla')}} and
 L<Text::Template>.  I also recommend applying F<Template_strict.patch>
 to Text::Template.  This will add support for the STRICT option, which
 will help catch errors in your templates.
@@ -31,6 +31,8 @@ will help catch errors in your templates.
 
 use Moose;
 use Moose::Autobox;
+# We operate as an InstallTool instead of a FileMunger because the
+# prerequisites have not been collected when FileMungers are run.
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::ModuleInfo';
 with 'Dist::Zilla::Role::TextTemplate';
@@ -102,6 +104,7 @@ sub setup_installer {
      date    => $release_date,
      dist    => $self->zilla->name,
      meta    => $self->zilla->distmeta,
+     t       => \$self,
      version => $self->zilla->version,
      zilla   => \$self->zilla,
   );
@@ -229,6 +232,43 @@ sub munge_file
 
   return;
 } # end munge_file
+#---------------------------------------------------------------------
+
+=method dependency_link
+
+  $t->dependency_link('Foo::Bar')
+
+A template can use this method to add a link to the documentation of a
+required module.  It returns either
+
+  L<Foo::Bar> (VERSION or later)
+
+or
+
+  L<Foo::Bar>
+
+depending on whether VERSION is non-zero.  (It determines VERSION by
+checking C<requires> and C<recommends> in your prerequisites.)
+
+=cut
+
+sub dependency_link
+{
+  my ($self, $module) = @_;
+
+  my $meta = $self->zilla->distmeta;
+  my $ver;
+
+  for my $key (qw(requires recommends)) {
+    last if defined($ver = $meta->{$key}{$module});
+  } # end for each $key
+
+  $self->log("WARNING: Can't find $module in prerequisites")
+      unless defined $ver;
+
+  if ($ver) { "L<$module> ($ver or later)" }
+  else      { "L<$module>" }
+} # end dependency_link
 
 #---------------------------------------------------------------------
 # Report a template error and die:
@@ -322,6 +362,10 @@ The name of the distribution.
 =item C<$meta>
 
 The hash of metadata that will be stored in F<META.yml>.
+
+=item C<$t>
+
+The TemplateCJM object that is processing the template.
 
 =item C<$version>
 

@@ -17,14 +17,14 @@ package Dist::Zilla::Plugin::GitVersionCheckCJM;
 # ABSTRACT: Ensure version numbers are up-to-date
 #---------------------------------------------------------------------
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DEPENDENCIES
 
-GitVersionCheckCJM requires L<Dist::Zilla> 1.092680 or later.  It also
-requires L<Git>, which is not on CPAN, but is distributed as part of
-C<git>.
+GitVersionCheckCJM requires {{$t->dependency_link('Dist::Zilla')}}.
+It also requires L<Git>, which is not on CPAN, but is distributed as
+part of C<git>.
 
 =cut
 
@@ -80,7 +80,7 @@ sub munge_file
   my $pm_info = $self->get_module_info($file);
 
   my $version = $pm_info->version
-      or die "ERROR: Can't find version in $pmFile";
+      or $self->log_fatal("ERROR: Can't find version in $pmFile");
 
   # If module version matches dist version, it's current:
   #   (unless that dist has already been released)

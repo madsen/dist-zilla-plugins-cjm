@@ -13,7 +13,7 @@ Revision history for Dist-Zilla-PluginBundle-CJM
 	Dist::Zilla::Plugin::TemplateCJM
 	  - Is now an InstallTool instead of a FileMunger, because
 	    prerequisites have not been calculated at FileMunger time
-	  - Added the dependency_link method
+	  - Added the dependency_link & dependency_list methods
 
 0.02   March 7, 2010
 	- Added POD tests

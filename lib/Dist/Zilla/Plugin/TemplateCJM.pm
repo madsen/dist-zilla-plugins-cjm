@@ -31,6 +31,8 @@ will help catch errors in your templates.
 
 use Moose;
 use Moose::Autobox;
+use List::Util ();
+
 # We operate as an InstallTool instead of a FileMunger because the
 # prerequisites have not been collected when FileMungers are run.
 with 'Dist::Zilla::Role::InstallTool';
@@ -269,6 +271,52 @@ sub dependency_link
   if ($ver) { "L<$module> ($ver or later)" }
   else      { "L<$module>" }
 } # end dependency_link
+#---------------------------------------------------------------------
+
+=method dependency_list
+
+  $t->dependency_list
+
+A template can use this method to add a list of required modules.
+It returns a string like:
+
+  Package                Minimum Version
+  ---------------------- ---------------
+  perl                    5.8.0
+  List::Util
+  Moose                   0.90
+
+If C<perl> is one of he dependencies, it is listed first.  All other
+dependencies are listed in ASCIIbetical order.  The string will NOT
+end with a newline.
+
+=cut
+
+sub dependency_list
+{
+  my ($self) = @_;
+
+  my $requires = $self->zilla->distmeta->{requires};
+
+  my @modules = sort grep { $_ ne 'perl' } keys %$requires;
+
+  unshift @modules, 'perl' if $requires->{perl};
+
+  my $width = List::Util::max(map { length $_ } @modules) + 1;
+
+  my $text = sprintf("  %-${width}s %s\n  ", 'Package', 'Minimum Version');
+  $text .= ('-' x $width) . " ---------------\n";
+
+  ++$width;
+
+  foreach my $req (@modules) {
+    $text .= sprintf("  %-${width}s %s\n", $req, $requires->{$req} || '');
+  }
+
+  $text =~ s/\s+\z//;           # Remove final newline
+
+  $text;
+} # end dependency_list
 
 #---------------------------------------------------------------------
 # Report a template error and die:

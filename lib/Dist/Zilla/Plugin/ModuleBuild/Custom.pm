@@ -77,6 +77,7 @@ sub get_meta
   my %want;
 
   foreach my $key (@_) {
+    $self->log_debug("Fetching distmeta key $key");
     next unless defined $distmeta->{$key};
 
     # Skip keys with empty value:
@@ -149,6 +150,7 @@ sub setup_installer
     BROKEN => sub { $self->template_error(@_) },
   );
 
+  $self->log_debug("Processing Build.PL as template");
   $file->content($self->fill_in_string($file->content, \%data, \%parms));
 
   return;

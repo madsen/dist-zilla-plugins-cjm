@@ -7,7 +7,7 @@ Revision history for Dist-Zilla-PluginBundle-CJM
 	Dist::Zilla::Plugin::ArchiveRelease
 	  - Shortened log message
 
-	Dist::Zilla::Plugin::CustomModuleBuild
+	Dist::Zilla::Plugin::ModuleBuild::Custom
 	  - New plugin
 
 	Dist::Zilla::Plugin::TemplateCJM

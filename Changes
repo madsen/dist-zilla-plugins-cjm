@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-PluginBundle-CJM
 
-0.03   NOT
+0.03   March 15, 2010
 	- Includes a new version of Template_strict.patch that
 	  supports scalar references properly
 

@@ -8,6 +8,7 @@
 ^\#
 ^MANIFEST\.
 ^Makefile$
+^README\.md
 ^\.
 ^blib/
 \bcjm_

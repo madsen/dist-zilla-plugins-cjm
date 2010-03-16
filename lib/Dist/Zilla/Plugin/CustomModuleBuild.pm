@@ -40,7 +40,7 @@ use Scalar::Util 'reftype';
 # We're trying to make the template executable before it's filled in,
 # so we want delimiters that look like comments:
 has '+delim' => (
-  default  => sub { [ '#{{', '#}}' ] },
+  default  => sub { [ '##{', '##}' ] },
 );
 
 # Get rid of any META.yml we may have picked up from Module::Build:
@@ -183,7 +183,7 @@ In your F<Build.PL>:
 
   my $builder = Module::Build->new(
     module_name => 'Foo::Bar',
-  {{'#{{ $plugin->get_prereqs #}}'}}
+  ##{ $plugin->get_prereqs ##}
   );
   $builder->create_build_script;
 
@@ -203,7 +203,7 @@ L<Module::Build> is capable of.
 This plugin will process F<Build.PL> as a template (using
 L<Text::Template>), which allows you to add data from Dist::Zilla to
 the version you distribute (if you want).  The template delimiters are
-{{'C<#{{> and C<#}}>'}}, because that makes them look like comments.
+C<##{> and C<##}>, because that makes them look like comments.
 That makes it easier to have a F<Build.PL> that works both before and
 after it is processed as a template.
 

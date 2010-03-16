@@ -14,6 +14,8 @@ Revision history for Dist-Zilla-PluginBundle-CJM
 	  - Is now an InstallTool instead of a FileMunger, because
 	    prerequisites have not been calculated at FileMunger time
 	  - Added the dependency_link & dependency_list methods
+	  - Added a BeforeRelease check to ensure the release date is
+	    not just an uppercase word
 
 0.02   March 7, 2010
 	- Added POD tests

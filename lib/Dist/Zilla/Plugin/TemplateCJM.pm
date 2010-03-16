@@ -36,6 +36,7 @@ use List::Util ();
 # We operate as an InstallTool instead of a FileMunger because the
 # prerequisites have not been collected when FileMungers are run.
 with 'Dist::Zilla::Role::InstallTool';
+with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::ModuleInfo';
 with 'Dist::Zilla::Role::TextTemplate';
 
@@ -140,6 +141,27 @@ sub setup_installer {
 } # end setup_installer
 
 #---------------------------------------------------------------------
+# Make sure we have a release date:
+
+has _release_date => (
+  is       => 'rw',
+  isa      => 'Str',
+  init_arg => undef,
+);
+
+sub before_release
+{
+  my $self = shift;
+
+  my $release_date = $self->_release_date;
+
+  $self->log_fatal(["Invalid release date in %s: %s",
+                    $self->changelog, $release_date ])
+      if not $release_date or $release_date =~ /^[[:upper:]]+$/;
+
+} # end before_release
+
+#---------------------------------------------------------------------
 # Make sure that we've listed this release in Changes:
 #
 # Returns:
@@ -184,6 +206,8 @@ sub check_Changes
   die "ERROR: Can't find any versions in $file" unless $release_date;
 
   $self->log("Version $version released $release_date\n$text");
+
+  $self->_release_date($release_date); # Remember it for before_release
 
   return ($release_date, $text);
 } # end check_Changes
@@ -453,10 +477,15 @@ distribution's version, which is available as C<$dist_version>.
 
 =back
 
+It also peforms a L<BeforeRelease|Dist::Zilla::Role::BeforeRelease>
+check to ensure that the relase date in the changelog is not a single
+uppercase word.  (I set the date to NOT until I'm ready to release.)
+
 =for Pod::Loom-omit
 CONFIGURATION AND ENVIRONMENT
 
 =for Pod::Coverage
+before_release
 check_Changes
 munge_file
 mvp_multivalue_args

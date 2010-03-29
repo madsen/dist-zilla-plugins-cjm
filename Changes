@@ -1,5 +1,13 @@
 Revision history for Dist-Zilla-PluginBundle-CJM
 
+0.04   NOT
+	- Now requires Dist::Zilla 2
+
+	Dist::Zilla::Plugin::ArchiveRelease
+	  - Added a BeforeRelease check to ensure the directory exists
+	    (creating it if necessary) and this release hasn't already
+	    been archived
+
 0.03   March 15, 2010
 	- Includes a new version of Template_strict.patch that
 	  supports scalar references properly

@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::ModuleBuild::Custom;
 # ABSTRACT: Allow a dist to have a custom Build.PL
 #---------------------------------------------------------------------
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DEPENDENCIES
@@ -201,7 +201,8 @@ L<ModuleBuild|Dist::Zilla::Plugin::ModuleBuild> plugins.
 
 It is a subclass of the L<ModuleBuild plugin|Dist::Zilla::Plugin::ModuleBuild>,
 but it does not write a F<Build.PL> for you.  Instead, you write your
-own F<Build.PL>, which may do anything L<Module::Build> is capable of.
+own F<Build.PL>, which may do anything L<Module::Build> is capable of
+(except generate a compatibility F<Makefile.PL>).
 
 This plugin will process F<Build.PL> as a template (using
 L<Text::Template>), which allows you to add data from Dist::Zilla to

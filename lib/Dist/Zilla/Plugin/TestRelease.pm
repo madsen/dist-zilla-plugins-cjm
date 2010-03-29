@@ -70,6 +70,8 @@ sub before_release
 
   my $error = $self->zilla->run_tests_in($target);
 
+  $error ||= $self->run_additional_tests($target);
+
   if ($error) {
     $self->log($error);
     $self->log_fatal("left failed dist in place at $target");
@@ -78,6 +80,27 @@ sub before_release
     $tmpdir->rmtree;
   }
 } # end before_release
+
+=method run_additional_tests
+
+  $error = $plugin->run_additional_tests($target)
+
+This method can be overriden in plugins that subclass TestRelease.  It
+is called after the tarball has been extracted and built and the tests
+have passed (it is not called if the tests failed).
+
+C<$target> is a Path::Class::Dir containing the root directory of the
+extracted dist (i.e., the directory where F<Makefile.PL> is).
+
+It must return C<undef> if the tarball is ready for release, or an
+error message explaining why it can't be released.
+
+=cut
+
+sub run_additional_tests
+{
+  # my ($self, $target) = @_;
+} # end run_additional_tests
 
 #---------------------------------------------------------------------
 no Moose;

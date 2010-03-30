@@ -17,8 +17,16 @@ package Dist::Zilla::Plugin::PodLoom;
 # ABSTRACT: Process module documentation through Pod::Loom
 #---------------------------------------------------------------------
 
-our $VERSION = '0.02';
+our $VERSION = '0.05';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
+
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+  [PodLoom]
+  template = Default      ; this is the default
+  data = loom.pl          ; there is no default for this
 
 =head1 DESCRIPTION
 

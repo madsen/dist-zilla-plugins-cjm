@@ -17,12 +17,18 @@ package Dist::Zilla::Plugin::VersionFromModule;
 # ABSTRACT: Get distribution version from its main_module
 #---------------------------------------------------------------------
 
-our $VERSION = '0.02';
+our $VERSION = '0.05';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 use Moose;
 with 'Dist::Zilla::Role::VersionProvider';
 with 'Dist::Zilla::Role::ModuleInfo';
+
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+  [VersionFromModule]
 
 =head1 DESCRIPTION
 

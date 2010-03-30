@@ -18,8 +18,15 @@ package Dist::Zilla::Plugin::ArchiveRelease;
 #---------------------------------------------------------------------
 
 use 5.008;
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
+
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+  [ArchiveRelease]
+  directory = releases      ; this is the default
 
 =head1 DESCRIPTION
 

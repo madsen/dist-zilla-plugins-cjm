@@ -17,8 +17,14 @@ package Dist::Zilla::Plugin::GitVersionCheckCJM;
 # ABSTRACT: Ensure version numbers are up-to-date
 #---------------------------------------------------------------------
 
-our $VERSION = '0.03';
+our $VERSION = '0.05';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
+
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+  [GitVersionCheckCJM]
 
 =head1 DEPENDENCIES
 

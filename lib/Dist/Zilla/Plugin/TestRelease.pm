@@ -21,6 +21,12 @@ use 5.008;
 our $VERSION = '0.05';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+  [TestRelease]
+
 =head1 DESCRIPTION
 
 If included, this plugin will cause the F<release> command to extract

@@ -1,6 +1,7 @@
 Revision history for Dist-Zilla-PluginBundle-CJM
 
 0.05   NOT
+	- All plugins now have a SYNOPSIS
 	- Revised compile tests
 
 	Dist::Zilla::Plugin::TestRelease

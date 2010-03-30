@@ -17,8 +17,17 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '0.03';
+our $VERSION = '0.05';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
+
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+  [TemplateCJM]
+  changelog = Changes      ; this is the default
+  changes   = 1            ; this is the default
+  file      = README       ; this is the default
 
 =head1 DEPENDENCIES
 

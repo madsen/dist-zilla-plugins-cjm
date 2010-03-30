@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::ModuleBuild::Custom;
 # ABSTRACT: Allow a dist to have a custom Build.PL
 #---------------------------------------------------------------------
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DEPENDENCIES
@@ -177,7 +177,7 @@ __PACKAGE__->meta->make_immutable;
 In F<dist.ini>:
 
   [ModuleBuild::Custom]
-  mb_version = 0.34
+  mb_version = 0.34  ; the default comes from the ModuleBuild plugin
 
 In your F<Build.PL>:
 

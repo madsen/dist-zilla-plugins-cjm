@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-PluginBundle-CJM
 
 0.05   NOT
+	- Revised compile tests
+
 	Dist::Zilla::Plugin::TestRelease
 	  - New plugin
 

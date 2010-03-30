@@ -4,9 +4,6 @@ Revision history for Dist-Zilla-PluginBundle-CJM
 	- All plugins now have a SYNOPSIS
 	- Revised compile tests
 
-	Dist::Zilla::Plugin::TestRelease
-	  - New plugin
-
 0.04   March 29, 2010
 	- Now requires Dist::Zilla 2
 	- Added compile tests

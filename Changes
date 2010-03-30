@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-PluginBundle-CJM
 
-0.05   NOT
+0.05   March 30, 2010
 	- All plugins now have a SYNOPSIS
 	- Revised compile tests
 

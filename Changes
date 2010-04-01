@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-PluginBundle-CJM
 
-0.06   NOT
+0.06   April 1, 2010
 	Dist::Zilla::Plugin::ArchiveRelease
 	  - add FilePruner for archive directory (Michael Schout)
 

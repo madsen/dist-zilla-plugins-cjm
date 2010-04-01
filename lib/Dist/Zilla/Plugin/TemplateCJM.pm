@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -44,10 +44,15 @@ use List::Util ();
 
 # We operate as an InstallTool instead of a FileMunger because the
 # prerequisites have not been collected when FileMungers are run.
-with 'Dist::Zilla::Role::InstallTool';
-with 'Dist::Zilla::Role::BeforeRelease';
-with 'Dist::Zilla::Role::ModuleInfo';
-with 'Dist::Zilla::Role::TextTemplate';
+with(
+  'Dist::Zilla::Role::InstallTool',
+  'Dist::Zilla::Role::BeforeRelease',
+  'Dist::Zilla::Role::ModuleInfo',
+  'Dist::Zilla::Role::TextTemplate',
+  'Dist::Zilla::Role::FileFinderUser' => {
+    default_finders => [ ':InstallModules' ],
+  },
+);
 
 sub mvp_multivalue_args { qw(file) }
 
@@ -94,6 +99,14 @@ has template_files => (
   init_arg => 'file',
   default  => sub { [ 'README' ] },
 );
+
+=attr finder
+
+This FileFinder provides the list of files that are processed in step
+3.  The default is C<:InstallModules>.  The C<finder> attribute may be
+listed any number of times.
+
+=cut
 
 #---------------------------------------------------------------------
 # Main entry point:
@@ -142,7 +155,7 @@ sub setup_installer {
   } # end foreach $file
 
   # Munge POD sections in modules:
-  $files = $files->grep(sub { $_->name =~ /\.pm$/ and $_->name !~ m{^t/};});
+  $files = $self->found_files;
 
   foreach my $file ($files->flatten) {
     $self->munge_file($file, \%data, \%parms);
@@ -460,9 +473,9 @@ The Dist::Zilla object that is creating the distribution.
 
 =item 3.
 
-It finds each F<.pm> file (except those in the F<t> directory, if
-any).  For each file, it processes each POD section and each comment
-that starts at the beginning of a line through Text::Template.
+For each module to be installed, it processes each POD section and
+each comment that starts at the beginning of a line through
+Text::Template.
 
 Each section may use the same variables as step 2, plus the following:
 

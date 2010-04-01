@@ -4,6 +4,10 @@ Revision history for Dist-Zilla-PluginBundle-CJM
 	Dist::Zilla::Plugin::ArchiveRelease
 	  - add FilePruner for archive directory (Michael Schout)
 
+	Dist::Zilla::Plugin::GitVersionCheckCJM
+	Dist::Zilla::Plugin::TemplateCJM
+	  - are now FileFinderUsers
+
 0.05   March 30, 2010
 	- All plugins now have a SYNOPSIS
 	- Revised compile tests

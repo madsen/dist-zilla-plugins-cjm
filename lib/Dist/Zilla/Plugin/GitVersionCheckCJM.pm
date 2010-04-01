@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::GitVersionCheckCJM;
 # ABSTRACT: Ensure version numbers are up-to-date
 #---------------------------------------------------------------------
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -36,8 +36,21 @@ part of C<git>.
 
 use Moose;
 use Moose::Autobox;
-with 'Dist::Zilla::Role::FileMunger';
-with 'Dist::Zilla::Role::ModuleInfo';
+with(
+  'Dist::Zilla::Role::FileMunger',
+  'Dist::Zilla::Role::ModuleInfo',
+  'Dist::Zilla::Role::FileFinderUser' => {
+    default_finders => [ ':InstallModules' ],
+  },
+);
+
+=attr finder
+
+This FileFinder provides the list of modules that will be checked.
+The default is C<:InstallModules>.  The C<finder> attribute may be
+listed any number of times.
+
+=cut
 
 use Git ();
 
@@ -61,9 +74,7 @@ sub munge_files {
   );
 
   # Get the list of modules:
-  my $files = $self->zilla->files->grep(
-    sub { $_->name =~ /\.pm$/ and $_->name !~ m{^t/};}
-  );
+  my $files = $self->found_files;
 
   # Check each module:
   my $errors = 0;

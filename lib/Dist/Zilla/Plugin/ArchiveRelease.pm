@@ -146,3 +146,4 @@ CONFIGURATION AND ENVIRONMENT
 =for Pod::Coverage
 before_release
 release
+prune_files

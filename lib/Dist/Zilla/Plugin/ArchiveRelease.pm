@@ -18,7 +18,7 @@ package Dist::Zilla::Plugin::ArchiveRelease;
 #---------------------------------------------------------------------
 
 use 5.008;
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -43,6 +43,7 @@ use Moose;
 use Moose::Autobox;
 with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::Releaser';
+with 'Dist::Zilla::Role::FilePruner';
 
 use Path::Class ();
 #---------------------------------------------------------------------
@@ -109,6 +110,28 @@ sub release
 
   $self->log("Moved to $destR");
 } # end release
+
+# prune archive files from the dist
+sub prune_files {
+    my ($self) = @_;
+
+    my $dir   = $self->directory->stringify;
+    my $root  = $self->zilla->root;
+    my $files = $self->zilla->files;
+
+    my @pruned_files;
+
+    for my $file (@$files) {
+        my $fdir = Path::Class::file($file->name)->dir->absolute($root)->stringify;
+        unless ($fdir eq $dir) {
+            push @pruned_files, $file;
+        }
+    }
+
+    @$files = @pruned_files;
+
+    return;
+}
 
 #---------------------------------------------------------------------
 no Moose;

@@ -7,6 +7,9 @@ Revision history for Dist-Zilla-PluginBundle-CJM
 	Dist::Zilla::Plugin::TestRelease
 	  - New plugin
 
+	Dist::Zilla::Plugin::ArchiveRelease
+	  - prune archives directory files via FilePruner
+
 0.04   March 29, 2010
 	- Now requires Dist::Zilla 2
 	- Added compile tests

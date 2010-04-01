@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More tests => 5;
 
 use Dist::Zilla::Tester;
 
@@ -73,6 +73,30 @@ END START
     ],
     "ArchiveRelease prunes non-standard releases directory",
   );
+}
+
+
+{
+  my $tzil = Dist::Zilla::Tester->from_config(
+    { dist_root => 'corpus/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => make_ini(
+          '[GatherDir]',
+          '[ArchiveRelease]',
+        ),
+      },
+      also_copy => { 'corpus/archives' => 'source/releases' },
+    },
+  );
+
+  $tzil->release;
+
+  my $tarball = $tzil->root->file('releases/DZT-Sample-0.001.tar.gz');
+  ok(-e $tarball, 'archived tarball');
+  is($tarball->stat->mode & 0777, 0444, 'tarball is read-only');
+  ok((not -e $tzil->root->file('DZT-Sample-0.001.tar.gz')),
+     'tarball was moved');
 }
 
 done_testing;

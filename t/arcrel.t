@@ -41,7 +41,7 @@ END START
 
   is_deeply(
     [ sort @files ],
-    [ sort(qw(dist.ini lib/DZT/Sample.pm t/basic.t)),
+    [ sort(qw(dist.ini README lib/DZT/Sample.pm t/basic.t)),
     ],
     "ArchiveRelease prunes default releases directory",
   );
@@ -69,7 +69,7 @@ END START
 
   is_deeply(
     [ sort @files ],
-    [ sort(qw(dist.ini lib/DZT/Sample.pm t/basic.t)),
+    [ sort(qw(dist.ini README lib/DZT/Sample.pm t/basic.t)),
     ],
     "ArchiveRelease prunes non-standard releases directory",
   );

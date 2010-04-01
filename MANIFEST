@@ -5,6 +5,7 @@ META.yml
 Makefile.PL
 README
 Template_strict.patch
+corpus/DZT/README
 corpus/DZT/lib/DZT/Sample.pm
 corpus/DZT/t/basic.t
 corpus/README
@@ -23,3 +24,5 @@ t/00-compile.t
 t/arcrel.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
+t/template.t
+t/vermod.t

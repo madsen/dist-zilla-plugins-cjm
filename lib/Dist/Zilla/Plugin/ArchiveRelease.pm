@@ -18,7 +18,7 @@ package Dist::Zilla::Plugin::ArchiveRelease;
 #---------------------------------------------------------------------
 
 use 5.008;
-our $VERSION = '0.06';
+our $VERSION = '0.08';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -37,6 +37,9 @@ L<UploadToCPAN|Dist::Zilla::Plugin::UploadToCPAN>), but it must be the
 last Releaser in your config (or the other Releasers won't be able to
 find the file being released).
 
+It also acts as a FilePruner in order to prevent Dist::Zilla from
+including the archived releases in future builds.
+
 =cut
 
 use Moose;
@@ -54,6 +57,8 @@ The directory to which the tarball will be moved.
 Defaults to F<releases>.
 If the directory doesn't exist, it will be created during the
 BeforeRelease phase.
+
+All files inside this directory will be pruned from the distribution.
 
 =cut
 

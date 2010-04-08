@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '0.06';
+our $VERSION = '0.08';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -280,6 +280,62 @@ sub munge_file
 
   return;
 } # end munge_file
+#---------------------------------------------------------------------
+
+=method build_instructions
+
+  $t->build_instructions( [$prefix] )
+
+A template can use this method to add build instructions for the
+distribution (normally used in README).  C<$prefix> is prepended to
+each line, and defaults to a single TAB.
+
+It returns either
+
+	perl Build.PL
+	./Build
+	./Build test
+	./Build install
+
+or
+
+	perl Makefile.PL
+	make
+	make test
+	make install
+
+depending on whether your distribution includes a Build.PL.  The
+string will NOT end with a newline.
+
+It throws an error if neither Build.PL nor Makefile.PL is found.
+
+=cut
+
+sub build_instructions
+{
+  my ($self, $indent) = @_;
+
+  $indent = "\t" unless defined $indent;
+
+  # Compute build instructions:
+  my $builder = $self->zilla->files
+                     ->map(sub{ $_->name })
+                     ->grep(sub{ /^(?:Build|Makefile)\.PL$/ })
+                     ->sort->head;
+
+  $self->log_fatal("Unable to locate Build.PL or Makefile.PL in distribution\n".
+                   "TemplateCJM must come after ModuleBuild or MakeMaker")
+      unless $builder;
+
+  my $build = ($builder eq 'Build.PL' ? './Build' : 'make');
+
+  join("\n", map { $indent . $_ }
+    "perl $builder",
+    "$build",
+    "$build test",
+    "$build install",
+  );
+} # end build_instructions
 #---------------------------------------------------------------------
 
 =method dependency_link

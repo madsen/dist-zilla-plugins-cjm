@@ -16,10 +16,7 @@ INSTALLATION
 
 To install these modules, run the following commands:
 
-    perl Makefile.PL
-    make
-    make test
-    make install
+{{ $t->build_instructions('    ') }}
 
 
 

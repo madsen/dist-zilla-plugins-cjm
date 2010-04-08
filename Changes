@@ -4,6 +4,9 @@ Revision history for Dist-Zilla-PluginBundle-CJM
 	Dist::Zilla::Plugin::ArchiveRelease
 	  - document the FilePruner role
 
+	Dist::Zilla::Plugin::TemplateCJM
+	  - added build_instructions method
+
 0.07   April 1, 2010
 	- added tests
 

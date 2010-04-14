@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
-0.08   NOT
+0.08   April 14, 2010
 	- This distribution is now Dist-Zilla-Plugins-CJM.
 	  Dist-Zilla-PluginBundle-CJM now contains only @CJM (and
 	  requires this distribution along with the other plugins used
@@ -15,6 +15,7 @@ Revision history for Dist-Zilla-Plugins-CJM
 
 	Dist::Zilla::Plugin::TemplateCJM
 	  - added build_instructions method
+	  - In templates, $changes no longer ends with a newline
 
 0.07   April 1, 2010
 	- added tests

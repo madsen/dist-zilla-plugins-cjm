@@ -229,7 +229,8 @@ sub check_Changes
 
   chomp $text;
 
-  $self->log("Version $version released $release_date\n$text");
+  $self->log("Version $version released $release_date");
+  $self->zilla->chrome->logger->log($text); # No prefix
 
   $self->_release_date($release_date); # Remember it for before_release
 
@@ -250,7 +251,7 @@ sub munge_file
   my $version = $pm_info->version
       or die "ERROR: Can't find version in $pmFile";
 
-  $self->log("Updating $pmFile: VERSION $version");
+  $self->log("$pmFile: VERSION $version");
 
   $dataRef->{version} = "$version";
   $dataRef->{module}  = $pm_info->name;

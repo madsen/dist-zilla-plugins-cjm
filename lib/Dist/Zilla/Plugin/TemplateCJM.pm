@@ -227,6 +227,8 @@ sub check_Changes
   # Report the results:
   die "ERROR: Can't find any versions in $file" unless $release_date;
 
+  chomp $text;
+
   $self->log("Version $version released $release_date\n$text");
 
   $self->_release_date($release_date); # Remember it for before_release
@@ -495,7 +497,8 @@ Each template may use the following variables:
 The changes in the current release.  This is a string containing all
 lines in F<Changes> following the version/release date line up to (but
 not including) the next line that begins with a non-whitespace
-character (or end-of-file).
+character (or end-of-file).  The string does B<not> end with a newline
+(since version 0.08).
 
 You can include the changes from more than one release by setting the
 L<< C<changes> attribute/"changes" >>.  This is useful when you make a
@@ -509,7 +512,7 @@ The release date as it appeared in F<Changes>.
 
 The name of the distribution.
 
-=item C<$meta>
+=item C<%meta>
 
 The hash of metadata that will be stored in F<META.yml>.
 

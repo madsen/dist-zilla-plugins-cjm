@@ -17,7 +17,7 @@ package Dist::Zilla::Role::ModuleInfo;
 # ABSTRACT: Create Module::Build::ModuleInfo object from Dist::Zilla::File
 #---------------------------------------------------------------------
 
-our $VERSION = '0.02';
+our $VERSION = '0.08';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 use Moose::Role;

@@ -1,8 +1,17 @@
-Revision history for Dist-Zilla-PluginBundle-CJM
+Revision history for Dist-Zilla-Plugins-CJM
 
 0.08   NOT
+	- This distribution is now Dist-Zilla-Plugins-CJM.
+	  Dist-Zilla-PluginBundle-CJM now contains only @CJM (and
+	  requires this distribution along with the other plugins used
+	  by @CJM).
+	- Updated all version numbers to 0.08
+
 	Dist::Zilla::Plugin::ArchiveRelease
 	  - document the FilePruner role
+
+	Dist::Zilla::Plugin::PodLoom
+	  - now distributed separately, in Dist-Zilla-Plugin-PodLoom
 
 	Dist::Zilla::Plugin::TemplateCJM
 	  - added build_instructions method

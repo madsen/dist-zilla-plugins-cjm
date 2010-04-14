@@ -43,16 +43,15 @@ sub gather_files {
 
       my $count = @modules;
 
-      @modules = grep { $_ ne 'Dist::Zilla::PluginBundle::CJM' and
-                        $_ ne 'Dist::Zilla::Plugin::GitVersionCheckCJM' }
+      @modules = grep { $_ ne 'Dist::Zilla::Plugin::GitVersionCheckCJM' }
                       @modules;
+
+      my $version = $self->zilla->version;
 
       my $content = <<"END HEADER";
 use Test::More tests => $count;
 
-use_ok('Dist::Zilla::PluginBundle::CJM');
-
-diag("Testing Dist::Zilla::PluginBundle::CJM \$Dist::Zilla::PluginBundle::CJM::VERSION");
+diag("Testing Dist-Zilla-Plugins-CJM $version");
 
 END HEADER
 

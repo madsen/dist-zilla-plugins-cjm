@@ -1,9 +1,13 @@
-Dist-Zilla-PluginBundle-CJM version {{$version}}, released {{$date}}
+Dist-Zilla-Plugins-CJM version {{$version}}, released {{$date}}
 
 
-Dist-Zilla-PluginBundle-CJM is a collection of plugins I've written
-for Dist::Zilla.  There isn't actually a @CJM bundle yet, because I'm
-still working out how I want to use Dist::Zilla.
+Dist-Zilla-Plugins-CJM is a collection of plugins I've written for
+Dist::Zilla.  The plugins here used to be distributed in
+Dist-Zilla-PluginBundle-CJM, but when I actually wrote @CJM, I decided
+that it had too many prerequisites to be distributed with them.  If
+you had previously installed Dist-Zilla-PluginBundle-CJM (and you
+aren't actually using @CJM), you should uninstall that and just
+install this.
 
 I've written some other plugins that are distributed separately,
 because they had different prerequisites.  The ones collected here
@@ -27,7 +31,7 @@ DEPENDENCIES
 
 
 CHANGES
-    Here's what's new in version {{$version}} of Dist-Zilla-PluginBundle-CJM:
+    Here's what's new in version {{$version}} of Dist-Zilla-Plugins-CJM:
     (See the file "Changes" for the full revision history.)
 
 {{$changes}}

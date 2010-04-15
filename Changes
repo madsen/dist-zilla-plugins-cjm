@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
-0.09   NOT
+0.09   April 15, 2010
 	Dist::Zilla::Plugin::ArchiveRelease
 	  - accept ~ in directory to mean home directory (RT#56433)
 

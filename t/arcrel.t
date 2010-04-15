@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use Dist::Zilla::Tester;
 
@@ -97,6 +97,29 @@ END START
   is($tarball->stat->mode & 0777, 0444, 'tarball is read-only');
   ok((not -e $tzil->root->file('DZT-Sample-0.001.tar.gz')),
      'tarball was moved');
+}
+
+{
+  require File::HomeDir;
+
+  my $tzil = Dist::Zilla::Tester->from_config(
+    { dist_root => 'corpus/DZT' },
+    {
+      add_files => {
+        'source/dist.ini' => make_ini(
+          '[GatherDir]',
+          '[ArchiveRelease]',
+          'directory = ~/some/dir',
+        ),
+      },
+    },
+  );
+
+  my $arcrel = $tzil->plugins_with(-Releaser)->[0];
+
+  is($arcrel->directory,
+     Path::Class::dir(File::HomeDir->my_home, qw(some dir)),
+     '~ expansion');
 }
 
 done_testing;

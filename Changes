@@ -1,5 +1,9 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
+0.09   NOT
+	Dist::Zilla::Plugin::ArchiveRelease
+	  - accept ~ in directory to mean home directory (RT#56433)
+
 0.08   April 14, 2010
 	- This distribution is now Dist-Zilla-Plugins-CJM.
 	  Dist-Zilla-PluginBundle-CJM now contains only @CJM (and

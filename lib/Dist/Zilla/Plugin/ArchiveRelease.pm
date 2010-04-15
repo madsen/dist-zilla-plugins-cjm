@@ -18,7 +18,7 @@ package Dist::Zilla::Plugin::ArchiveRelease;
 #---------------------------------------------------------------------
 
 use 5.008;
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -53,7 +53,8 @@ use Path::Class ();
 
 =attr directory
 
-The directory to which the tarball will be moved.
+The directory to which the tarball will be moved.  It may begin with
+C<~> (or C<~user>) to mean your (or some other user's) home directory.
 Defaults to F<releases>.
 If the directory doesn't exist, it will be created during the
 BeforeRelease phase.
@@ -67,14 +68,41 @@ has _directory => (
   isa      => 'Str',
   default  => 'releases',
   init_arg => 'directory',
+  writer   => '_set_directory',
 );
 
 sub directory
 {
   my $self = shift;
 
-  Path::Class::dir($self->_directory)->absolute($self->zilla->root);
+  my $dir = $self->_directory;
+
+  # Convert ~ to home directory:
+  if ($dir =~ /^~/) {
+    require File::HomeDir;
+
+    $dir =~ s/^~(\w+)/ File::HomeDir->users_home("$1") /e;
+    $dir =~ s/^~/      File::HomeDir->my_home /e;
+
+    $self->_set_directory($dir);
+  } # end if $dir begins with ~
+
+  Path::Class::dir($dir)->absolute($self->zilla->root);
 } # end get_directory
+
+#---------------------------------------------------------------------
+# Format a path for display:
+
+sub pretty_path
+{
+  my ($self, $path) = @_;
+
+  my $root = $self->zilla->root;
+
+  $path = $path->relative($root) if $root->subsumes($path);
+
+  "$path";
+} # end pretty_path
 
 #---------------------------------------------------------------------
 # Don't distribute previously archived releases:
@@ -105,7 +133,7 @@ sub before_release
 
   # If the directory doesn't exist, create it:
   unless (-d $dir) {
-    my $dirR = $dir->relative($self->zilla->root);
+    my $dirR = $self->pretty_path($dir);
 
     mkdir $dir or $self->log_fatal("Unable to create directory $dirR: $!");
     $self->log("Created directory $dirR");
@@ -114,8 +142,7 @@ sub before_release
   # If the tarball has already been archived, abort:
   my $file = $dir->file($tgz->basename);
 
-  $self->log_fatal(["%s already exists",
-                    $file->relative($self->zilla->root)->stringify])
+  $self->log_fatal($self->pretty_path($file) . " already exists")
       if -e $file;
 } # end before_release
 
@@ -129,7 +156,7 @@ sub release
   chmod(0444, $tgz);
 
   my $dest = $self->directory->file($tgz->basename);
-  my $destR = $dest->relative($self->zilla->root);
+  my $destR = $self->pretty_path($dest);
 
   rename $tgz, $dest or $self->log_fatal("Failed to move to $destR: $!");
 
@@ -149,4 +176,5 @@ CONFIGURATION AND ENVIRONMENT
 =for Pod::Coverage
 before_release
 release
+pretty_path
 prune_files

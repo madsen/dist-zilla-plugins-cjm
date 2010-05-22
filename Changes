@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
-3.00   NOT
+3.00   May 22, 2010
 	- Now requires Dist::Zilla 3
 
 	Dist::Zilla::Plugin::TemplateCJM

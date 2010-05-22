@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '0.08';
+our $VERSION = '3.00';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -363,7 +363,7 @@ sub dependency_link
 {
   my ($self, $module) = @_;
 
-  my $meta = $self->zilla->distmeta;
+  my $meta = $self->zilla->distmeta->{prereqs}{runtime} || {};
   my $ver;
 
   for my $key (qw(requires recommends)) {
@@ -401,7 +401,7 @@ sub dependency_list
 {
   my ($self) = @_;
 
-  my $requires = $self->zilla->distmeta->{requires};
+  my $requires = $self->zilla->distmeta->{prereqs}{runtime}{requires};
 
   my @modules = sort grep { $_ ne 'perl' } keys %$requires;
 

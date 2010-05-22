@@ -1,5 +1,11 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
+3.00   NOT
+	- Now requires Dist::Zilla 3
+
+	Dist::Zilla::Plugin::TemplateCJM
+	  - Now compatible with Dist::Zilla 3
+
 0.09   April 15, 2010
 	Dist::Zilla::Plugin::ArchiveRelease
 	  - accept ~ in directory to mean home directory (RT#56433)

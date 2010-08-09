@@ -1,6 +1,9 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
 3.01   NOT
+	Dist::Zilla::Plugin::ArchiveRelease
+	  - Use File::Copy::move to support cross-filesystem moves (RT#59288)
+
 	Dist::Zilla::Plugin::ModuleBuild::Custom
 	  - Now compatible with Dist::Zilla 3
 	  - Now has tests

@@ -3,6 +3,7 @@ Revision history for Dist-Zilla-Plugins-CJM
 3.01   NOT
 	Dist::Zilla::Plugin::ModuleBuild::Custom
 	  - Now compatible with Dist::Zilla 3
+	  - Now has tests
 
 3.00   May 22, 2010
 	- Now requires Dist::Zilla 3

@@ -30,7 +30,7 @@ license  = Perl_5
 copyright_holder = E. Xavier Ample
 version          = 0.04
 
-[Prereq]
+[Prereqs]
 Foo::Bar = 1.00
 Bloofle  = 0
 

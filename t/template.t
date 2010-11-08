@@ -18,7 +18,7 @@ author   = E. Xavier Ample <example@example.org>
 license  = Perl_5
 copyright_holder = E. Xavier Ample
 
-[Prereq]
+[Prereqs]
 Foo::Bar = 1.00
 Bloofle  = 0
 END START

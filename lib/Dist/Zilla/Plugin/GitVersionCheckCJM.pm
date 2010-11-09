@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::GitVersionCheckCJM;
 # ABSTRACT: Ensure version numbers are up-to-date
 #---------------------------------------------------------------------
 
-our $VERSION = '0.08';
+our $VERSION = '3.02';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -34,6 +34,7 @@ part of C<git>.
 
 =cut
 
+use version 0.77 ();
 use Moose;
 use Moose::Autobox;
 with(
@@ -99,16 +100,28 @@ sub munge_file
   my $version = $pm_info->version
       or $self->log_fatal("ERROR: Can't find version in $pmFile");
 
+  my $distver = version->parse($self->zilla->version);
+
   # If module version matches dist version, it's current:
   #   (unless that dist has already been released)
-  if ($version eq $self->zilla->version) {
+  if ($version == $distver) {
     return unless $releasedRef->{$version};
+  }
+
+  # If the module version is greater than the dist version, that's a problem:
+  if ($version > $distver) {
+    $self->log("ERROR: $pmFile: $version exceeds dist version $distver");
+    return 1;
   }
 
   # If the module hasn't been committed yet, it needs updating:
   #   (since it doesn't match the dist version)
   if ($modifiedRef->{$pmFile}) {
-    $self->log("ERROR: $pmFile: $version needs to be updated");
+    if ($version == $distver) {
+      $self->log("ERROR: $pmFile: dist version $version needs to be updated");
+    } else {
+      $self->log("ERROR: $pmFile: $version needs to be updated");
+    }
     return 1;
   }
 
@@ -132,7 +145,11 @@ sub munge_file
   # We're ok if the last change was part of the indicated release:
   return if $inRelease =~ m! tags/\Q$version\E!;
 
-  $self->log("ERROR: $pmFile: $version needs to be updated");
+  if ($version == $distver) {
+    $self->log("ERROR: $pmFile: dist version $version needs to be updated");
+  } else {
+    $self->log("ERROR: $pmFile: $version needs to be updated");
+  }
   return 1;
 } # end munge_file
 

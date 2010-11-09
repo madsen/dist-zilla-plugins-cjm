@@ -2,7 +2,10 @@ Revision history for Dist-Zilla-Plugins-CJM
 
 3.02   NOT
 	- Fixed test prerequisites
-	- No functional changes in this release
+
+	Dist::Zilla::Plugin::GitVersionCheckCJM
+	  - Complain if a module's version exceeds the dist's version
+	  - Indicate when the dist's version needs to be incremented
 
 3.01   August 9, 2010
 	Dist::Zilla::Plugin::ArchiveRelease

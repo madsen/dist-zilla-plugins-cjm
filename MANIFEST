@@ -13,6 +13,7 @@ corpus/README
 corpus/archives/DZT-Sample-0.01.tar.gz
 corpus/archives/DZT-Sample-0.02.tar.gz
 corpus/archives/DZT-Sample-0.03.tar.gz
+corpus/gitvercheck.git
 lib/Dist/Zilla/Plugin/ArchiveRelease.pm
 lib/Dist/Zilla/Plugin/GitVersionCheckCJM.pm
 lib/Dist/Zilla/Plugin/ModuleBuild/Custom.pm
@@ -21,6 +22,7 @@ lib/Dist/Zilla/Plugin/VersionFromModule.pm
 lib/Dist/Zilla/Role/ModuleInfo.pm
 t/00-compile.t
 t/arcrel.t
+t/gitvercheck.t
 t/mb_custom.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t

@@ -60,7 +60,7 @@ END HEADER
       $content .= <<'END GIT';
 
 SKIP: {
-  skip 'Git not installed', 1 unless eval "use Git; 1";
+  skip 'Git::Wrapper not installed', 1 unless eval "use Git::Wrapper; 1";
 
   use_ok('Dist::Zilla::Plugin::GitVersionCheckCJM');
 }

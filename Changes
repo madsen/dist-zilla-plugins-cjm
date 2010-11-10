@@ -4,6 +4,7 @@ Revision history for Dist-Zilla-Plugins-CJM
 	- Fixed test prerequisites
 
 	Dist::Zilla::Plugin::GitVersionCheckCJM
+	  - Use Git::Wrapper instead of Git
 	  - Complain if a module's version exceeds the dist's version
 	  - Indicate when the dist's version needs to be incremented
 

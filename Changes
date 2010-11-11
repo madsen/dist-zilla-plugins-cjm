@@ -1,12 +1,13 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
-3.02   NOT
-	- Fixed test prerequisites
+3.02   November 11, 2010
+	- Fixed test prerequisites (needed Test::More 0.88)
 
 	Dist::Zilla::Plugin::GitVersionCheckCJM
-	  - Use Git::Wrapper instead of Git
+	  - Use Git::Wrapper instead of Git (RT#60140)
 	  - Complain if a module's version exceeds the dist's version
 	  - Indicate when the dist's version needs to be incremented
+	  - Now has tests
 
 3.01   August 9, 2010
 	Dist::Zilla::Plugin::ArchiveRelease

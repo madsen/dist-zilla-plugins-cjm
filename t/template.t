@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use Dist::Zilla::Tester;
 
@@ -120,6 +120,12 @@ END CHANGES
     $module,
     qr{^\Q# This file is part of DZT-Sample 0.04 (March 29, 2010)\E\n}m,
     'comment in module',
+  );
+
+  like(
+    $module,
+    qr{^\Q# This { {comment}} should be unchanged.\E\n}m,
+    'unchanged comment in module',
   );
 
   like(

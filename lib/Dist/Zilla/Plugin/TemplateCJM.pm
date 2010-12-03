@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '3.00';
+our $VERSION = '3.03';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -272,7 +272,10 @@ sub munge_file
                }xgems;
 
   # And comments at BOL:
-  $content =~ s{( ^\#.+ )}
+  #   Text::Template breaks on strings that have the closing delimiter
+  #   without the opening one.  Only process comments that have at
+  #   least one matched set of delimiters.
+  $content =~ s{( ^\# .* \{\{ .* \}\} .* )}
                {
                  $self->_cur_offset($-[0]);
                  $self->fill_in_string($1, $dataRef, $parmsRef)

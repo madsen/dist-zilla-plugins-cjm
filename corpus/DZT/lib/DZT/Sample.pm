@@ -4,6 +4,8 @@ package DZT::Sample;
 use strict;
 use warnings;
 
+# This { {comment}} should be unchanged.
+
 our $VERSION = '0.04';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 

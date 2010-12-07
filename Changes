@@ -1,6 +1,9 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
 3.03   NOT
+	Dist::Zilla::Plugin::Metadata
+	  - New plugin
+
 	Dist::Zilla::Plugin::TemplateCJM
 	  - Only process comments that contain a {{ }} pair.
 	    Text::Template breaks on strings that have the closing

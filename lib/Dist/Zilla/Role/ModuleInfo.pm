@@ -17,7 +17,7 @@ package Dist::Zilla::Role::ModuleInfo;
 # ABSTRACT: Create Module::Build::ModuleInfo object from Dist::Zilla::File
 #---------------------------------------------------------------------
 
-our $VERSION = '0.08';
+our $VERSION = '3.04';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 use Moose::Role;
@@ -47,6 +47,9 @@ sub get_module_info
   my $self = shift;
   my $file = shift;
   # Any additional parameters get passed to M::B::ModuleInfo->new_from_file
+
+  # To be safe, reset the global variables controlling IO to their defaults:
+  local ($/, $,, $\) = "\n";
 
   # Module::Build::ModuleInfo doesn't have a new_from_string method,
   # so we'll write the current contents to a temporary file:

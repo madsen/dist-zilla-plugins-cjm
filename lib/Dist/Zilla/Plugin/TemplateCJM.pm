@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '3.03';
+our $VERSION = '3.04';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -550,7 +550,7 @@ The name of the module being processed (i.e., its package).
 
 =item C<$pm_info>
 
-A Module::Build::ModuleInfo object containing information about the
+A Module::Metadata object containing information about the
 module.  (Note that the filename in C<$pm_info> will not be correct.)
 
 =item C<$version>

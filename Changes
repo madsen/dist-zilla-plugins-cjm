@@ -2,6 +2,7 @@ Revision history for Dist-Zilla-Plugins-CJM
 
 3.04   NOT
 	Dist::Zilla::Role::ModuleInfo
+	  - Use Module::Metadata instead of Module::Build::ModuleInfo.
 	  - Locally reset $/ $, $\ to default values (just in case)
 
 3.03   December 7, 2010

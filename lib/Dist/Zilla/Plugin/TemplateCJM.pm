@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '3.04';
+our $VERSION = '3.05';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -398,6 +398,8 @@ If C<perl> is one of he dependencies, it is listed first.  All other
 dependencies are listed in ASCIIbetical order.  The string will NOT
 end with a newline.
 
+If there are no dependencies, the string C<None.> will be returned.
+
 =cut
 
 sub dependency_list
@@ -410,7 +412,9 @@ sub dependency_list
 
   unshift @modules, 'perl' if $requires->{perl};
 
-  my $width = List::Util::max(map { length $_ } @modules) + 1;
+  return 'None.' unless @modules;
+
+  my $width = List::Util::max(6, map { length $_ } @modules) + 1;
 
   my $text = sprintf("  %-${width}s %s\n  ", 'Package', 'Minimum Version');
   $text .= ('-' x $width) . " ---------------\n";

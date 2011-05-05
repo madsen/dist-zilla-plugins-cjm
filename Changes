@@ -1,5 +1,9 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
+3.05   NOT
+	Dist::Zilla::Plugin::TemplateCJM
+	  - Fix dependency_list to handle no dependencies
+
 3.04   December 20, 2010
 	Dist::Zilla::Role::ModuleInfo
 	  - Use Module::Metadata instead of Module::Build::ModuleInfo

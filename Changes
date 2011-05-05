@@ -1,6 +1,9 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
 3.05   NOT
+	Dist::Zilla::Plugin::ModuleBuild::Custom
+	  - Added get_default method
+
 	Dist::Zilla::Plugin::TemplateCJM
 	  - Fix dependency_list to handle no dependencies
 

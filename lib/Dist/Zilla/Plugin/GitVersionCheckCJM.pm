@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::GitVersionCheckCJM;
 # ABSTRACT: Ensure version numbers are up-to-date
 #---------------------------------------------------------------------
 
-our $VERSION = '3.02';
+our $VERSION = '3.05';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -82,7 +82,7 @@ sub munge_files {
   my %released = map { /^v?([\d._]+)$/ ? ($1, 1) : () } $git->tag;
 
   # Get the list of modified but not-checked-in files:
-  my %modified = map { $_ => 1 } (
+  my %modified = map { $self->log_debug("mod: $_"); $_ => 1 } (
     # Files that need to be committed:
     _git0($git, qw( diff_index -z HEAD --name-only )),
     # Files that are not tracked by git yet:

@@ -80,6 +80,8 @@ sub new_tzil
     { dist_root => $gitRoot },
   );
 
+  $tzil->plugin_named('GitVersionCheckCJM')->logger->set_debug(1);
+
   # Something about the copy dzil makes seems to confuse git into
   # thinking files are modified when they aren't.
   # Run "git status" in the source directory to unconfuse it:
@@ -110,10 +112,33 @@ sub errors
 } # end errors
 
 #---------------------------------------------------------------------
+# Write the log messages as diagnostics:
+
+sub diag_log
+{
+  my $tzil = shift;
+
+  # Output nothing if all tests passed:
+  my $all_passed = shift;
+  $all_passed &&= $_ for @_;
+
+  return if $all_passed;
+
+  diag(map { "$_\n" } @{ $tzil->log_messages });
+
+  {
+    my $wd = pushd($tzil->tempdir->subdir("source"));
+    diag("git status:\n", `git status`);
+  }
+} # end diag_log
+
+#---------------------------------------------------------------------
 {
   my $tzil = new_tzil;
-  is(exception { $tzil->build }, undef, "build 0.04");
-  is_deeply(errors($tzil), {}, "no errors in 0.04");
+  diag_log($tzil,
+    is(exception { $tzil->build }, undef, "build 0.04"),
+    is_deeply(errors($tzil), {}, "no errors in 0.04"),
+  );
 #  print "$_\n" for @{ $tzil->log_messages };
 #  print $tzil->tempdir,"\n"; my $wait = <STDIN>;
 }
@@ -122,30 +147,36 @@ sub errors
   set_version('0.04', 'Sample/Second');
 
   my $tzil = new_tzil;
-  like(exception { $tzil->build }, $stoppedRE, "can't build modified 0.04");
+  diag_log($tzil,
+    like(exception { $tzil->build }, $stoppedRE, "can't build modified 0.04"),
 
-  is_deeply(errors($tzil),
-            { 'Sample/Second' => 'dist version 0.04 needs to be updated' },
-            "errors in modified 0.04");
+    is_deeply(errors($tzil),
+              { 'Sample/Second' => 'dist version 0.04 needs to be updated' },
+              "errors in modified 0.04"),
+  );
 }
 
 {
   set_version('0.05', 'Sample');
 
   my $tzil = new_tzil;
-  like(exception { $tzil->build }, $stoppedRE, "can't build 0.05 yet");
+  diag_log($tzil,
+    like(exception { $tzil->build }, $stoppedRE, "can't build 0.05 yet"),
 
-  is_deeply(errors($tzil),
-            { 'Sample/Second' => '0.04 needs to be updated' },
-            "errors in 0.05");
+    is_deeply(errors($tzil),
+              { 'Sample/Second' => '0.04 needs to be updated' },
+              "errors in 0.05"),
+  );
 }
 
 {
   set_version('0.05', 'Sample/Second');
 
   my $tzil = new_tzil;
-  is(exception { $tzil->build }, undef, "can build 0.05 now");
-  is_deeply(errors($tzil), {}, "no errors in 0.05 now");
+  diag_log($tzil,
+    is(exception { $tzil->build }, undef, "can build 0.05 now"),
+    is_deeply(errors($tzil), {}, "no errors in 0.05 now"),
+  );
 }
 
 #---------------------------------------------------------------------
@@ -155,19 +186,23 @@ $git->reset(qw(--hard --quiet)); # Restore to checked-in state
   set_version('0.045', 'First');
 
   my $tzil = new_tzil;
-  like(exception { $tzil->build }, $stoppedRE, "can't build with 0.045");
-  is_deeply(errors($tzil), { First => '0.045 exceeds dist version 0.04' },
-            "errors with 0.045");
+  diag_log($tzil,
+    like(exception { $tzil->build }, $stoppedRE, "can't build with 0.045"),
+    is_deeply(errors($tzil), { First => '0.045 exceeds dist version 0.04' },
+              "errors with 0.045"),
+  );
 }
 
 {
   set_version('0.05', 'Sample');
 
   my $tzil = new_tzil;
-  like(exception { $tzil->build }, $stoppedRE, "can't build 0.05 with 0.045");
-  is_deeply(errors($tzil), {
-    First => '0.045 needs to be updated',
-  }, "errors in 0.05 with 0.045");
+  diag_log($tzil,
+    like(exception { $tzil->build }, $stoppedRE, "can't build 0.05 with 0.045"),
+    is_deeply(errors($tzil), {
+      First => '0.045 needs to be updated',
+    }, "errors in 0.05 with 0.045"),
+  );
 }
 
 {
@@ -175,29 +210,35 @@ $git->reset(qw(--hard --quiet)); # Restore to checked-in state
   $git->commit(-m => 'checking in DZT::First 0.045');
 
   my $tzil = new_tzil;
-  like(exception { $tzil->build }, $stoppedRE,
-       "can't build 0.05 with 0.045 committed");
-  is_deeply(errors($tzil), {
-    First => '0.045 does not seem to have been released, but is not current',
-  }, "errors in 0.05 with 0.045 committed");
+  diag_log($tzil,
+    like(exception { $tzil->build }, $stoppedRE,
+         "can't build 0.05 with 0.045 committed"),
+    is_deeply(errors($tzil), {
+      First => '0.045 does not seem to have been released, but is not current',
+    }, "errors in 0.05 with 0.045 committed"),
+  );
 }
 
 {
   set_version('0.05', 'First');
 
   my $tzil = new_tzil;
-  is(exception { $tzil->build }, undef, "can build with First 0.05");
-  is_deeply(errors($tzil), {}, "no errors with First 0.05");
+  diag_log($tzil,
+    is(exception { $tzil->build }, undef, "can build with First 0.05"),
+    is_deeply(errors($tzil), {}, "no errors with First 0.05"),
+  );
 }
 
 {
   edit('First', sub { s/^.*VERSION.*\n//m or die });
 
   my $tzil = new_tzil;
-  like(exception { $tzil->build }, qr/ERROR: Can't find version/,
-       "can't build with First unversioned");
-  is_deeply(errors($tzil), { First => "Can't find version in" },
-            "errors with First unversioned");
+  diag_log($tzil,
+    like(exception { $tzil->build }, qr/ERROR: Can't find version/,
+         "can't build with First unversioned"),
+    is_deeply(errors($tzil), { First => "Can't find version in" },
+              "errors with First unversioned"),
+  );
 }
 
 undef $tempdir;                 # Clean up temporary directory

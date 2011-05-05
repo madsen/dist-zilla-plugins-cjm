@@ -1,6 +1,10 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
 3.05   NOT
+	Dist::Zilla::Plugin::GitVersionCheckCJM
+	  - Log more information in debug mode
+	  - Tests now output the log on failure
+
 	Dist::Zilla::Plugin::ModuleBuild::Custom
 	  - Added get_default method
 

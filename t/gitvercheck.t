@@ -17,7 +17,7 @@ BEGIN {
 
 plan tests => 18;
 
-use Dist::Zilla::Tester 'Builder';
+use Test::DZil 'Builder';
 use File::pushd 'pushd';
 use File::Temp ();
 use Path::Class qw(dir file);

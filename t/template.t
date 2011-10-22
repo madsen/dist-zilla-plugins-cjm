@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Test::More tests => 6;
 
-use Dist::Zilla::Tester;
+use Test::DZil 'Builder';
 
 #---------------------------------------------------------------------
 sub make_ini
@@ -65,7 +65,7 @@ my @dates = (
 );
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my $tzil = Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {

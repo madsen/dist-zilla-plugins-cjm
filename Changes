@@ -1,5 +1,8 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
+4.00   NOT
+	- Tests now use Test::DZil
+
 3.05   May 5, 2011
 	Dist::Zilla::Plugin::GitVersionCheckCJM
 	  - Log more information in debug mode

@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Test::More tests => 6;
 
-use Dist::Zilla::Tester;
+use Test::DZil 'Builder';
 
 sub make_ini
 {
@@ -21,19 +21,29 @@ END START
   $ini . join('', map { "$_\n" } @_);
 } # end make_ini
 
+sub new_tzil
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
+  my ($archiveConfig, $copy_archives) = @_;
+
+  Builder->from_config(
     { dist_root => 'corpus/DZT' },
     {
       add_files => {
         'source/dist.ini' => make_ini(
           '[GatherDir]',
           '[ArchiveRelease]',
+          @$archiveConfig,
         ),
       },
-      also_copy => { 'corpus/archives' => 'source/releases' },
+      ($copy_archives
+       ? (also_copy => { 'corpus/archives' => $copy_archives })
+       : ()),
     },
   );
+} # end new_tzil
+
+{
+  my $tzil = new_tzil([], 'source/releases');
 
   $tzil->build;
 
@@ -49,19 +59,7 @@ END START
 
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
-    { dist_root => 'corpus/DZT' },
-    {
-      add_files => {
-        'source/dist.ini' => make_ini(
-          '[GatherDir]',
-          '[ArchiveRelease]',
-          'directory = cjm_releases',
-        ),
-      },
-      also_copy => { 'corpus/archives' => 'source/cjm_releases' },
-    },
-  );
+  my $tzil = new_tzil(['directory = cjm_releases'], 'source/cjm_releases');
 
   $tzil->build;
 
@@ -77,18 +75,7 @@ END START
 
 
 {
-  my $tzil = Dist::Zilla::Tester->from_config(
-    { dist_root => 'corpus/DZT' },
-    {
-      add_files => {
-        'source/dist.ini' => make_ini(
-          '[GatherDir]',
-          '[ArchiveRelease]',
-        ),
-      },
-      also_copy => { 'corpus/archives' => 'source/releases' },
-    },
-  );
+  my $tzil = new_tzil([], 'source/releases');
 
   $tzil->release;
 
@@ -102,18 +89,7 @@ END START
 {
   require File::HomeDir;
 
-  my $tzil = Dist::Zilla::Tester->from_config(
-    { dist_root => 'corpus/DZT' },
-    {
-      add_files => {
-        'source/dist.ini' => make_ini(
-          '[GatherDir]',
-          '[ArchiveRelease]',
-          'directory = ~/some/dir',
-        ),
-      },
-    },
-  );
+  my $tzil = new_tzil(['directory = ~/some/dir']);
 
   my $arcrel = $tzil->plugins_with(-Releaser)->[0];
 

@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::GitVersionCheckCJM;
 # ABSTRACT: Ensure version numbers are up-to-date
 #---------------------------------------------------------------------
 
-our $VERSION = '3.05';
+our $VERSION = '4.00';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -110,6 +110,7 @@ sub munge_file
 
   # Extract information from the module:
   my $pmFile  = $file->name;
+  $self->log_debug("checking $pmFile");
   my $pm_info = $self->get_module_info($file);
 
   my $version = $pm_info->version

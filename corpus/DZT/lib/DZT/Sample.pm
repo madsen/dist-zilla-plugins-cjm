@@ -6,6 +6,9 @@ use warnings;
 
 # This { {comment}} should be unchanged.
 
+# RECOMMEND PREREQ: Foo::Bar 1.00
+# RECOMMEND PREREQ: Foo::Baz
+
 our $VERSION = '0.04';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 

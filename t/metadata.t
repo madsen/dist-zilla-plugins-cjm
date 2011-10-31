@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More 0.88 tests => 5; # done_testing
 
 use Test::DZil 'Builder';
 

@@ -54,7 +54,8 @@ listed any number of times.
 
 =cut
 
-use Git::Wrapper ();
+# RECOMMEND PREREQ: Git::Wrapper
+use Git::Wrapper ();            # AutoPrereqs skips this
 
 #---------------------------------------------------------------------
 # Helper sub to run a git command and split on NULs:

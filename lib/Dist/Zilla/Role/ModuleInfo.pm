@@ -17,13 +17,13 @@ package Dist::Zilla::Role::ModuleInfo;
 # ABSTRACT: Create Module::Metadata object from Dist::Zilla::File
 #---------------------------------------------------------------------
 
-our $VERSION = '3.04';
+our $VERSION = '4.00';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 use Moose::Role;
 
 use autodie ':io';
-use File::Temp ();
+use File::Temp 0.19 ();         # need newdir
 use Module::Metadata ();
 use Path::Class qw(dir file);
 

@@ -1,6 +1,9 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
 4.00   NOT
+	Dist::Zilla::Plugin::RecommendedPrereqs
+	  - New plugin
+
 	Dist::Zilla::Plugin::TemplateCJM
 	  - Add changelog_re parameter
 

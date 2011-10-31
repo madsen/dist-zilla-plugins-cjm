@@ -5,12 +5,13 @@ use strict;
 use warnings;
 use autodie ':io';
 
-use Test::More;
+use Test::More 0.88;            # done_testing
 
 BEGIN {
   eval "use Git::Wrapper; 1"
       or plan skip_all => "Git::Wrapper required for testing GitVersionCheckCJM";
 
+  # RECOMMEND PREREQ: Test::Fatal
   eval "use Test::Fatal; 1"
       or plan skip_all => "Test::Fatal required for testing GitVersionCheckCJM";
 }

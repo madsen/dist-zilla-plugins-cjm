@@ -18,7 +18,7 @@ package Dist::Zilla::Plugin::ArchiveRelease;
 #---------------------------------------------------------------------
 
 use 5.008;
-our $VERSION = '3.01';
+our $VERSION = '4.00';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -80,6 +80,7 @@ sub directory
   # Convert ~ to home directory:
   if ($dir =~ /^~/) {
     require File::HomeDir;
+    File::HomeDir->VERSION(0.81);
 
     $dir =~ s/^~(\w+)/ File::HomeDir->users_home("$1") /e;
     $dir =~ s/^~/      File::HomeDir->my_home /e;

@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '3.05';
+our $VERSION = '4.00';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -40,6 +40,7 @@ will help catch errors in your templates.
 
 use Moose;
 use Moose::Autobox;
+use Moose::Util::TypeConstraints;
 use List::Util ();
 
 # We operate as an InstallTool instead of a FileMunger because the
@@ -66,6 +67,27 @@ has changelog => (
   is   => 'ro',
   isa  => 'Str',
   default  => 'Changes',
+);
+
+=attr changelog_re
+
+This is the regex used to extract the version and release date from
+the F<Changes> file.  It defaults to C<(\d[\d._]*)\s+(.+)>
+(i.e. version number at beginning of the line, followed by whitespace,
+and everything after that is the release date).  It it automatically
+anchored at the beginning of the line.  Note: your version lines
+I<must not> begin with whitespace.  All other lines I<must> begin with
+whitespace.
+
+=cut
+
+coerce 'RegexpRef', from 'Str', via { qr/$_/ };
+
+has changelog_re => (
+  is   => 'ro',
+  isa  => 'RegexpRef',
+  coerce   => 1,
+  default  => sub { qr/(\d[\d._]*)\s+(.+)/ },
 );
 
 =attr changes
@@ -205,8 +227,10 @@ sub check_Changes
 
   my ($release_date, $text);
 
+  my $re = $self->changelog_re;
+
   while (<$Changes>) {
-    if (/^(\d[\d._]*)\s+(.+)/) {
+    if (/^$re/) {
       die "ERROR: $file begins with version $1, expected version $version"
           unless $1 eq $version;
       $release_date = $2;
@@ -215,6 +239,7 @@ sub check_Changes
         last if /^\S/ and --$list_releases <= 0;
         $text .= $_;
       }
+      $text =~ s/\A\s*\n//;     # Remove leading blank lines
       $text =~ s/\s*\z/\n/;     # Normalize trailing whitespace
       die "ERROR: $file contains no history for version $version"
           unless length($text) > 1;

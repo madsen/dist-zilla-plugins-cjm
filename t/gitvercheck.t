@@ -16,12 +16,11 @@ BEGIN {
       or plan skip_all => "Test::Fatal required for testing GitVersionCheckCJM";
 }
 
-plan tests => 18;
-
 use Test::DZil 'Builder';
 use File::pushd 'pushd';
 use File::Temp ();
 use Path::Class qw(dir file);
+use Try::Tiny qw(try catch);
 
 my $stoppedRE = qr/Stopped because of errors/;
 
@@ -35,17 +34,26 @@ my $tempdir    = File::Temp->newdir;
 my $gitRoot    = dir("$tempdir")->absolute;
 my $gitHistory = file("corpus/gitvercheck.git")->absolute;
 
-{
+my $git;
+
+try {
   my $wd = pushd($gitRoot);
-  system "git init --quiet" and die "Couldn't init";
-  system "git fast-import --quiet <\"$gitHistory\"" and die "Couldn't import";
-}
+  system "git init --quiet" and die "##Couldn't init\n";
+  system "git fast-import --quiet <\"$gitHistory\""
+      and die "##Couldn't import\n";
 
-my $git = Git::Wrapper->new("$gitRoot");
+  $git = Git::Wrapper->new("$gitRoot");
 
-$git->config('user.email', 'example@example.org');
-$git->config('user.name',  'E. Xavier Ample');
-$git->checkout(qw(--force --quiet master));
+  $git->config('user.email', 'example@example.org');
+  $git->config('user.name',  'E. Xavier Ample');
+  $git->checkout(qw(--force --quiet master));
+  $git->reset(qw(--hard --quiet));
+} catch {
+  chomp if s/^##//;
+  plan skip_all => "$_ repo";
+};
+
+plan tests => 18;
 
 #---------------------------------------------------------------------
 sub edit
@@ -134,8 +142,8 @@ sub diag_log
     my $wd = pushd($tzil->tempdir->subdir("source"));
     diag(
       `git --version`,
-      "git diff_index:\n", `git diff_index HEAD --name-only`,
-      "git ls_files:\n",   `git ls_files -o --exclude-standard`,
+      "git diff-index:\n", `git diff-index HEAD --name-only`,
+      "git ls-files:\n",   `git ls-files -o --exclude-standard`,
       "git status:\n",     `git status`,
     );
   }

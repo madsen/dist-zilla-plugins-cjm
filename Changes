@@ -1,5 +1,9 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
+4.01   NOT
+	- Fixed buggy diagnostics in gitvercheck.t
+	- No changes to plugins
+
 4.00   November 1, 2011
 	Dist::Zilla::Plugin::RecommendedPrereqs
 	  - New plugin

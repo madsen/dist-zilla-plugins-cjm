@@ -1,5 +1,9 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
+4.02   NOT
+	- Fixed the bogus failures in gitvercheck.t
+	- No changes to plugins
+
 4.01   November 2, 2011
 	- Fixed buggy diagnostics in gitvercheck.t
 	- No changes to plugins

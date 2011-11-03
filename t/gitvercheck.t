@@ -38,19 +38,18 @@ my $git;
 
 try {
   my $wd = pushd($gitRoot);
-  system "git init --quiet" and die "##Couldn't init\n";
+  system "git init --quiet" and die "Couldn't init repo\n";
   system "git fast-import --quiet <\"$gitHistory\""
-      and die "##Couldn't import\n";
+      and die "Couldn't import repo\n";
 
   $git = Git::Wrapper->new("$gitRoot");
 
   $git->config('user.email', 'example@example.org');
   $git->config('user.name',  'E. Xavier Ample');
   $git->checkout(qw(--force --quiet master));
-  $git->reset(qw(--hard --quiet));
 } catch {
-  chomp if s/^##//;
-  plan skip_all => "$_ repo";
+  chomp;
+  plan skip_all => $_;
 };
 
 plan tests => 18;
@@ -96,8 +95,8 @@ sub new_tzil
 
   # Something about the copy dzil makes seems to confuse git into
   # thinking files are modified when they aren't.
-  # Run "git status" in the source directory to unconfuse it:
-  Git::Wrapper->new( $tzil->tempdir->subdir("source") )->status;
+  # Run "git reset --mixed" in the source directory to unconfuse it:
+  Git::Wrapper->new( $tzil->tempdir->subdir("source") )->reset('--mixed');
 
   $tzil;
 } # end new_tzil

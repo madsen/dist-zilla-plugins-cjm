@@ -1,5 +1,12 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
+4.03   NOT
+	Dist::Zilla::Plugin::MakeMaker::Custom
+	  - New plugin
+
+	Dist::Zilla::Role::HashDumper
+	  - New role
+
 4.02   November 3, 2011
 	- Fixed the bogus failures in gitvercheck.t
 	- No changes to plugins

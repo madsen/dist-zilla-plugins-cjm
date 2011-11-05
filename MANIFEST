@@ -16,11 +16,13 @@ corpus/archives/DZT-Sample-0.03.tar.gz
 corpus/gitvercheck.git
 lib/Dist/Zilla/Plugin/ArchiveRelease.pm
 lib/Dist/Zilla/Plugin/GitVersionCheckCJM.pm
+lib/Dist/Zilla/Plugin/MakeMaker/Custom.pm
 lib/Dist/Zilla/Plugin/Metadata.pm
 lib/Dist/Zilla/Plugin/ModuleBuild/Custom.pm
 lib/Dist/Zilla/Plugin/RecommendedPrereqs.pm
 lib/Dist/Zilla/Plugin/TemplateCJM.pm
 lib/Dist/Zilla/Plugin/VersionFromModule.pm
+lib/Dist/Zilla/Role/HashDumper.pm
 lib/Dist/Zilla/Role/ModuleInfo.pm
 t/00-compile.t
 t/arcrel.t

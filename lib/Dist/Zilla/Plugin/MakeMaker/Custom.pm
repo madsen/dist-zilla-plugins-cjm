@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-package Dist::Zilla::Plugin::ModuleBuild::Custom;
+package Dist::Zilla::Plugin::MakeMaker::Custom;
 #
 # Copyright 2010 Christopher J. Madsen
 #
@@ -14,7 +14,7 @@ package Dist::Zilla::Plugin::ModuleBuild::Custom;
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See either the
 # GNU General Public License or the Artistic License for more details.
 #
-# ABSTRACT: Allow a dist to have a custom Build.PL
+# ABSTRACT: Allow a dist to have a custom Makefile.PL
 #---------------------------------------------------------------------
 
 our $VERSION = '4.03';
@@ -22,7 +22,7 @@ our $VERSION = '4.03';
 
 =head1 DEPENDENCIES
 
-ModuleBuild::Custom requires {{$t->dependency_link('Dist::Zilla')}} and
+MakeMaker::Custom requires {{$t->dependency_link('Dist::Zilla')}} and
 L<Text::Template>.  I also recommend applying F<Template_strict.patch>
 to Text::Template.  This will add support for the STRICT option, which
 will help catch errors in your templates.
@@ -31,7 +31,7 @@ will help catch errors in your templates.
 
 use Moose;
 use Moose::Autobox;
-extends 'Dist::Zilla::Plugin::ModuleBuild';
+extends 'Dist::Zilla::Plugin::MakeMaker';
 with qw(Dist::Zilla::Role::FilePruner
         Dist::Zilla::Role::HashDumper);
 
@@ -41,59 +41,17 @@ has '+delim' => (
   default  => sub { [ '##{', '##}' ] },
 );
 
-has distmeta1 => (
-  is   => 'ro',
-  isa  => 'HashRef',
-  init_arg  => undef,
-  lazy      => 1,
-  builder   => '_build_distmeta1',
-);
-
-sub _build_distmeta1
+# Get rid of any META.yml we may have picked up from MakeMaker:
+sub prune_files
 {
-  my $self = shift;
-
-  require CPAN::Meta::Converter;
-  CPAN::Meta::Converter->VERSION(2.101550); # improved downconversion
-
-  my $converter = CPAN::Meta::Converter->new($self->zilla->distmeta);
-  return $converter->convert(version => '1.4');
-} # end _build_distmeta1
-
-# Get rid of any META.yml we may have picked up from Module::Build:
-sub prune_files {
   my ($self) = @_;
 
   my $files = $self->zilla->files;
-  @$files = grep { not($_->name eq 'META.yml' and
+  @$files = grep { not($_->name =~ /META\.(?:yml|json)$/ and
                        $_->isa('Dist::Zilla::File::OnDisk')) } @$files;
 
   return;
 } # end prune_files
-
-=method get_meta
-
-  $plugin->get_meta(qw(key1 key2 ...))
-
-A template can call this method to extract the specified key(s) from
-C<distmeta> and have them formatted into a comma-separated list
-suitable for a hash constructor or a method's parameter list.  The
-keys (and the returned values) are from the META 1.4 spec, because
-that's what Module::Build uses in its API.
-
-If any key has no value (or its value is an empty hash or array ref)
-it will be omitted from the list.  If all keys are omitted, the empty
-string is returned.  Otherwise, the result always ends with a comma.
-
-=cut
-
-sub get_meta
-{
-  my $self = shift;
-
-  # Extract the wanted keys from distmeta:
-  return $self->extract_keys(distmeta1 => $self->distmeta1, @_);
-} # end get_meta
 #---------------------------------------------------------------------
 
 =method get_prereqs
@@ -102,8 +60,7 @@ sub get_meta
 
 This is equivalent to
 
-  $plugin->get_meta(qw(build_requires configure_requires requires
-                       recommends conflicts))
+  $plugin->get_default(qw(BUILD_REQUIRES CONFIGURE_REQUIRES PREREQ_PM))
 
 In other words, it returns all the keys that describe the
 distribution's prerequisites.
@@ -112,8 +69,7 @@ distribution's prerequisites.
 
 sub get_prereqs
 {
-  shift->get_meta(qw(build_requires configure_requires requires recommends
-                     conflicts));
+  shift->get_default(qw(BUILD_REQUIRES CONFIGURE_REQUIRES PREREQ_PM));
 } # end get_prereqs
 
 #---------------------------------------------------------------------
@@ -123,51 +79,81 @@ sub get_prereqs
   $plugin->get_default(qw(key1 key2 ...))
 
 A template can call this method to extract the specified key(s) from
-the default Module::Build arguments created by the normal ModuleBuild
+the default WriteMakefile arguments created by the normal MakeMaker
 plugin and have them formatted into a comma-separated list suitable
-for a hash constructor or a method's parameter list.
+for a hash constructor or a function's parameter list.
 
 If any key has no value (or its value is an empty hash or array ref)
 it will be omitted from the list.  If all keys are omitted, the empty
 string is returned.  Otherwise, the result always ends with a comma.
 
-The most common usage would be
-
-    ##{ $plugin->get_default('share_dir') ##}
-
 =cut
-
-has _default_mb_args => (
-  is        => 'ro',
-  isa       => 'HashRef',
-  init_arg  => undef,
-  lazy      => 1,
-  builder   => 'module_build_args',
-);
 
 sub get_default
 {
   my $self = shift;
 
-  return $self->extract_keys(module_build => $self->_default_mb_args, @_);
+  return $self->extract_keys(WriteMakefile => $self->__write_makefile_args, @_);
 } # end get_default
 
-#---------------------------------------------------------------------
-sub setup_installer
-{
+has _mmc_running_parent_setup => (
+  is   => 'rw',
+  init_arg  => undef,
+);
+
+has _mmc_share_dir_block => (
+  is        => 'rw',
+  isa       => 'ArrayRef[Str]',
+  init_arg  => undef,
+);
+
+has _mmc_perl_prereq => (
+  is        => 'rw',
+  isa       => 'Maybe[Str]',
+  init_arg  => undef,
+);
+
+around fill_in_string => sub {
+  my $orig = shift;
   my $self = shift;
 
-  my $file = $self->zilla->files->grep(sub { $_->name eq 'Build.PL' })->head
-      or $self->log_fatal("No Build.PL found in dist");
+  if ($self->_mmc_running_parent_setup) {
+    my $data = $_[1];
+    $self->_mmc_share_dir_block($data->{share_dir_block})
+        if exists $data->{share_dir_block};
+    $self->_mmc_perl_prereq(${ $data->{perl_prereq} })
+        if exists $data->{perl_prereq};
 
-  # Process Build.PL through Text::Template:
+    return '';
+  } else {
+    $self->$orig(@_);
+  }
+};
+
+sub add_file {}                 # Don't let parent class add any files
+
+#---------------------------------------------------------------------
+around setup_installer => sub {
+  my $orig = shift;
+  my $self = shift;
+
+  $self->_mmc_running_parent_setup(1);
+  $self->$orig(@_);
+  $self->_mmc_running_parent_setup(0);
+
+  my $file = $self->zilla->files->grep(sub { $_->name eq 'Makefile.PL' })->head
+      or $self->log_fatal("No Makefile.PL found in dist");
+
+  # Process Makefile.PL through Text::Template:
   my %data = (
      dist    => $self->zilla->name,
-     meta    => $self->distmeta1,
-     meta2   => $self->zilla->distmeta,
+     meta    => $self->zilla->distmeta,
      plugin  => \$self,
      version => $self->zilla->version,
      zilla   => \$self->zilla,
+     eumm_version    => \($self->eumm_version),
+     perl_prereq     => \($self->_mmc_perl_prereq),
+     share_dir_block => $self->_mmc_share_dir_block,
   );
 
   # The STRICT option hasn't been implemented in a released version of
@@ -179,11 +165,11 @@ sub setup_installer
     BROKEN => sub { $self->template_error(@_) },
   );
 
-  $self->log_debug("Processing Build.PL as template");
+  $self->log_debug("Processing Makefile.PL as template");
   $file->content($self->fill_in_string($file->content, \%data, \%parms));
 
   return;
-} # end setup_installer
+}; # end setup_installer
 
 sub template_error
 {
@@ -191,7 +177,7 @@ sub template_error
 
   # Put the filename into the error message:
   my $err = $e{error};
-  $err =~ s/ at template line (?=\d)/ at Build.PL line /g;
+  $err =~ s/ at template line (?=\d)/ at Makefile.PL line /g;
 
   $self->log_fatal($err);
 } # end template_error
@@ -205,40 +191,40 @@ __PACKAGE__->meta->make_immutable;
 
 In F<dist.ini>:
 
-  [ModuleBuild::Custom]
-  mb_version = 0.34  ; the default comes from the ModuleBuild plugin
+  [MakeMaker::Custom]
+  eumm_version = 0.34  ; the default comes from the MakeMaker plugin
 
-In your F<Build.PL>:
+In your F<Makefile.PL>:
 
-  use Module::Build;
+  use ExtUtils::MakeMaker;
 
-  my $builder = Module::Build->new(
-    module_name => 'Foo::Bar',
+  ##{ $share_dir_block[0] ##}
+
+  WriteMakefile(
   ##{ $plugin->get_prereqs ##}
-  ##{ $plugin->get_default('share_dir') ##}
   );
-  $builder->create_build_script;
 
-Of course, your F<Build.PL> should be more complex than that, or you
+  ##{ $share_dir_block[1] ##}
+
+Of course, your F<Makefile.PL> should be more complex than that, or you
 don't need this plugin.
 
 =head1 DESCRIPTION
 
 This plugin is for people who need something more complex than the
-auto-generated F<Makefile.PL> or F<Build.PL> generated by the
+auto-generated F<Makefile.PL> or F<Makefile.PL> generated by the
 L<MakeMaker|Dist::Zilla::Plugin::MakeMaker> or
-L<ModuleBuild|Dist::Zilla::Plugin::ModuleBuild> plugins.
+L<MakeMaker|Dist::Zilla::Plugin::MakeMaker> plugins.
 
-It is a subclass of the L<ModuleBuild plugin|Dist::Zilla::Plugin::ModuleBuild>,
-but it does not write a F<Build.PL> for you.  Instead, you write your
-own F<Build.PL>, which may do anything L<Module::Build> is capable of
-(except generate a compatibility F<Makefile.PL>).
+It is a subclass of the L<MakeMaker plugin|Dist::Zilla::Plugin::MakeMaker>,
+but it does not write a F<Makefile.PL> for you.  Instead, you write your
+own F<Makefile.PL>, which may do anything L<ExtUtils::MakeMaker> is capable of.
 
-This plugin will process F<Build.PL> as a template (using
+This plugin will process F<Makefile.PL> as a template (using
 L<Text::Template>), which allows you to add data from Dist::Zilla to
 the version you distribute (if you want).  The template delimiters are
 C<##{> and C<##}>, because that makes them look like comments.
-That makes it easier to have a F<Build.PL> that works both before and
+That makes it easier to have a F<Makefile.PL> that works both before and
 after it is processed as a template.
 
 The template may use the following variables:
@@ -249,17 +235,31 @@ The template may use the following variables:
 
 The name of the distribution.
 
+=item C<$eumm_version>
+
+The minimum version of ExtUtils::MakeMaker required
+(from the C<eumm_version> attribute of this plugin).
+
 =item C<$meta>
 
-The hash of metadata (in META 1.4 format) that will be stored in F<META.yml>.
+The hash of metadata (in META 2 format) that will be stored in F<META.json>.
 
-=item C<$meta2>
+=item C<$perl_prereq>
 
-The hash of metadata (in META 2 format) that will be stored in F<META.yml>.
+The minimum version of Perl required (from the prerequisites in the metadata).
+May be C<undef>.
 
 =item C<$plugin>
 
-The ModuleBuild::Custom object that is processing the template.
+The MakeMaker::Custom object that is processing the template.
+
+=item C<@share_dir_block>
+
+An array of two strings containing the code for loading
+C<File::ShareDir::Install> (if it's used by this dist).  Put
+S<C<##{ $share_dir_block[0] ##}>> after the S<C<use ExtUtils::MakeMaker>>
+line, and put S<C<##{ $share_dir_block[1] ##}>> after the C<WriteMakefile>
+call.
 
 =item C<$version>
 
@@ -274,12 +274,13 @@ The Dist::Zilla object that is creating the distribution.
 =head1 INCOMPATIBILITIES
 
 You must not use this in conjunction with the
-L<ModuleBuild|Dist::Zilla::Plugin::ModuleBuild> plugin.
+L<MakeMaker|Dist::Zilla::Plugin::MakeMaker> plugin.
 
 =for Pod::Loom-omit
 CONFIGURATION AND ENVIRONMENT
 
 =for Pod::Coverage
+add_file
 prune_files
 setup_installer
 template_error

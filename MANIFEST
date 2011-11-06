@@ -29,6 +29,7 @@ t/arcrel.t
 t/gitvercheck.t
 t/mb_custom.t
 t/metadata.t
+t/mm_custom.t
 t/recommendedprereqs.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t

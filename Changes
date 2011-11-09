@@ -1,6 +1,9 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
 4.03   NOT
+	Dist::Zilla::Plugin::GitVersionCheckCJM
+	  - Add :IncModules & :ExecFiles to default finders
+
 	Dist::Zilla::Plugin::MakeMaker::Custom
 	  - New plugin
 

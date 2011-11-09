@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::GitVersionCheckCJM;
 # ABSTRACT: Ensure version numbers are up-to-date
 #---------------------------------------------------------------------
 
-our $VERSION = '4.00';
+our $VERSION = '4.03';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -42,7 +42,7 @@ with(
   'Dist::Zilla::Role::FileMunger',
   'Dist::Zilla::Role::ModuleInfo',
   'Dist::Zilla::Role::FileFinderUser' => {
-    default_finders => [ ':InstallModules' ],
+    default_finders => [ qw(:InstallModules :IncModules :ExecFiles) ],
   },
 );
 

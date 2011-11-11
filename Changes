@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
-4.03   NOT
+4.03   November 11, 2011
 	Dist::Zilla::Plugin::GitVersionCheckCJM
 	  - Add :IncModules & :ExecFiles to default finders
 

@@ -229,6 +229,10 @@ C<##{> and C<##}>, because that makes them look like comments.
 That makes it easier to have a F<Makefile.PL> that works both before and
 after it is processed as a template.
 
+This is particularly useful for XS-based modules, because it can allow
+you to build and test the module without the overhead of S<C<dzil build>>
+after every small change.
+
 The template may use the following variables:
 
 =over
@@ -277,6 +281,12 @@ The Dist::Zilla object that is creating the distribution.
 
 You must not use this in conjunction with the
 L<MakeMaker|Dist::Zilla::Plugin::MakeMaker> plugin.
+
+=head1 SEE ALSO
+
+The <ModuleBuild::Custom|Dist::Zilla::Plugin::ModuleBuild::Custom>
+plugin does basically the same thing as this plugin, but for
+F<Build.PL> (if you prefer L<Module::Build>).
 
 =for Pod::Loom-omit
 CONFIGURATION AND ENVIRONMENT

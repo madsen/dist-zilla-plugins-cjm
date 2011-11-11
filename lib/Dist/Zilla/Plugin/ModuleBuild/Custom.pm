@@ -65,7 +65,7 @@ sub prune_files {
   my ($self) = @_;
 
   my $files = $self->zilla->files;
-  @$files = grep { not($_->name eq 'META.yml' and
+  @$files = grep { not($_->name =~ /^META\.(?:yml|json)$/ and
                        $_->isa('Dist::Zilla::File::OnDisk')) } @$files;
 
   return;

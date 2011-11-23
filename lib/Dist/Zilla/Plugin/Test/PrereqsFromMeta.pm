@@ -126,7 +126,7 @@ TEST: {
 
     while (<META>) {
       last if /^\s*\},?\s*\z/;
-      ok(/^\s*"(.+)" : \{\s*\z/, "found relationship $1") or last TEST;
+      ok(/^\s*"(.+)" : \{\s*\z/, "found relationship $phase $1") or last TEST;
       my $rel = $1;
 
       while (<META>) {
@@ -137,13 +137,13 @@ TEST: {
 
         next if $phase ne 'runtime' or $prereq eq 'perl';
 
+        my $loaded = eval "require $prereq; $prereq->VERSION($version); 1";
         if ($rel eq 'requires') {
-          ok(eval "require $prereq; $prereq->VERSION($version); 1",
-             "loaded $prereq $version")
+          ok($loaded, "loaded $prereq $version")
               or printf STDERR "\n#    Got: %s %s\n# Wanted: %s %s\n",
                   $prereq, get_version($prereq), $prereq, $version;
         } else {
-          eval "require $prereq;"; # just try loading it
+          ok(1, ($loaded ? 'loaded' : 'failed to load') . " $prereq $version");
         }
       } # end while <META> in prerequisites
     } # end while <META> in relationship

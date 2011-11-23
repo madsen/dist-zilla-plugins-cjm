@@ -21,9 +21,11 @@ lib/Dist/Zilla/Plugin/Metadata.pm
 lib/Dist/Zilla/Plugin/ModuleBuild/Custom.pm
 lib/Dist/Zilla/Plugin/RecommendedPrereqs.pm
 lib/Dist/Zilla/Plugin/TemplateCJM.pm
+lib/Dist/Zilla/Plugin/Test/PrereqsFromMeta.pm
 lib/Dist/Zilla/Plugin/VersionFromModule.pm
 lib/Dist/Zilla/Role/HashDumper.pm
 lib/Dist/Zilla/Role/ModuleInfo.pm
+t/00-all_prereqs.t
 t/00-compile.t
 t/arcrel.t
 t/gitvercheck.t

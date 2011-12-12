@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
-4.04   NOT
+4.04   December 12, 2011
 	Dist::Zilla::Plugin::Test::PrereqsFromMeta
 	  - New plugin
 

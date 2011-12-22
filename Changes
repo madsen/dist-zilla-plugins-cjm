@@ -1,5 +1,9 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
+4.05   NOT
+	Dist::Zilla::Plugin::RecommendedPrereqs
+	  - Filter runtime recommendations out of test recommendations
+
 4.04   December 12, 2011
 	Dist::Zilla::Plugin::Test::PrereqsFromMeta
 	  - New plugin

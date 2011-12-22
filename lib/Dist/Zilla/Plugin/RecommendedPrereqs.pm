@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::RecommendedPrereqs;
 # ABSTRACT: Look for comments recommending prerequisites
 #---------------------------------------------------------------------
 
-our $VERSION = '4.00';
+our $VERSION = '4.05';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -84,6 +84,8 @@ sub register_prereqs
     [ test    => 'found_test_files' ],
   );
 
+  my %runtime;
+
   for my $fileset (@sets) {
     my ($phase, $method) = @$fileset;
 
@@ -103,6 +105,15 @@ sub register_prereqs
     # we're done, add what we've found
     while (my ($type, $req) = each %req) {
       $req = $req->as_string_hash;
+
+      if ($phase eq 'runtime') {
+        $runtime{$type} = $req;
+      } else {
+        delete $req->{$_} for
+            grep { exists $req->{$_} and $runtime{$type}{$_} ge $req->{$_} }
+            keys %{ $runtime{$type} || {} };
+      }
+
       $self->zilla->register_prereqs({ phase => $phase, type => "\L${type}s" },
                                      %$req) if %$req;
     }

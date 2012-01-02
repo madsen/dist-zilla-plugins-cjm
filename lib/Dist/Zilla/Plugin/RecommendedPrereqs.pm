@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::RecommendedPrereqs;
 # ABSTRACT: Look for comments recommending prerequisites
 #---------------------------------------------------------------------
 
-our $VERSION = '4.05';
+our $VERSION = '4.06';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -72,7 +72,7 @@ use namespace::autoclean;
 
 #=====================================================================
 
-use Version::Requirements 0.100630 ();  # merge with 0-min bug
+use CPAN::Meta::Requirements ();
 use version ();
 
 sub register_prereqs
@@ -89,7 +89,7 @@ sub register_prereqs
   for my $fileset (@sets) {
     my ($phase, $method) = @$fileset;
 
-    my %req = map { $_ => Version::Requirements->new } qw(RECOMMEND SUGGEST);
+    my %req = map { $_ => CPAN::Meta::Requirements->new } qw(RECOMMEND SUGGEST);
 
     my $files = $self->$method;
 

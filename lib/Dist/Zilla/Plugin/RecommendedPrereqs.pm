@@ -72,7 +72,7 @@ use namespace::autoclean;
 
 #=====================================================================
 
-use Version::Requirements 0.100630 ();  # merge with 0-min bug
+use CPAN::Meta::Requirements 2.113640 ();
 use version ();
 
 sub register_prereqs
@@ -89,7 +89,7 @@ sub register_prereqs
   for my $fileset (@sets) {
     my ($phase, $method) = @$fileset;
 
-    my %req = map { $_ => Version::Requirements->new } qw(RECOMMEND SUGGEST);
+    my %req = map { $_ => CPAN::Meta::Requirements->new } qw(RECOMMEND SUGGEST);
 
     my $files = $self->$method;
 

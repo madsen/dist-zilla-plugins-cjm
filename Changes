@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
-4.06   NOT
+4.06   January 2, 2012
 	Dist::Zilla::Plugin::RecommendedPrereqs
 	  - use CPAN::Meta::Requirements (new name of Version::Requirements)
 

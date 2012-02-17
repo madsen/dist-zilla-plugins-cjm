@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::MakeMaker::Custom;
 # ABSTRACT: Allow a dist to have a custom Makefile.PL
 #---------------------------------------------------------------------
 
-our $VERSION = '4.03';
+our $VERSION = '4.07';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DEPENDENCIES
@@ -284,7 +284,7 @@ L<MakeMaker|Dist::Zilla::Plugin::MakeMaker> plugin.
 
 =head1 SEE ALSO
 
-The <ModuleBuild::Custom|Dist::Zilla::Plugin::ModuleBuild::Custom>
+The L<ModuleBuild::Custom|Dist::Zilla::Plugin::ModuleBuild::Custom>
 plugin does basically the same thing as this plugin, but for
 F<Build.PL> (if you prefer L<Module::Build>).
 

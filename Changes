@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
-4.07   NOT
+4.07   February 22, 2012
 	Dist::Zilla::Plugin::MakeMaker::Custom
 	  - now compatible with (and requires) Dist::Zilla 4.300009
 	  - fix typo in documentation

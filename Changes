@@ -1,8 +1,13 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
+4.08   NOT
+	Dist::Zilla::Plugin::MakeMaker::Custom
+	  - document how it compares to the MakeMaker::Awesome plugin
+
 4.07   February 22, 2012
 	Dist::Zilla::Plugin::MakeMaker::Custom
 	  - now compatible with (and requires) Dist::Zilla 4.300009
+	    %share_dir_code replaces @share_dir_block in templates
 	  - fix typo in documentation
 
 	Dist::Zilla::Plugin::ModuleBuild::Custom

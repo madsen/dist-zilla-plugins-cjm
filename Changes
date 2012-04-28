@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
-4.08   NOT
+4.08   April 28, 2012
+	- no functional changes in this release, just improved docs
+
 	Dist::Zilla::Plugin::MakeMaker::Custom
 	  - document how it compares to the MakeMaker::Awesome plugin
 

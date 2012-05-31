@@ -28,6 +28,7 @@ In your F<dist.ini>:
   changelog = Changes      ; this is the default
   changes   = 1            ; this is the default
   file      = README       ; this is the default
+  report_versions = 1      ; this is the default
 
 =head1 DEPENDENCIES
 
@@ -128,7 +129,17 @@ This FileFinder provides the list of files that are processed in step
 3.  The default is C<:InstallModules>.  The C<finder> attribute may be
 listed any number of times.
 
+=attr report_versions
+
+If true (the default), report the version of each module processed.
+
 =cut
+
+has report_versions => (
+  is      => 'ro',
+  isa     => 'Bool',
+  default => 1,
+);
 
 #---------------------------------------------------------------------
 # Main entry point:
@@ -276,7 +287,7 @@ sub munge_file
   my $version = $pm_info->version
       or die "ERROR: Can't find version in $pmFile";
 
-  $self->log("$pmFile: VERSION $version");
+  $self->log("$pmFile: VERSION $version") if $self->report_versions;
 
   $dataRef->{version} = "$version";
   $dataRef->{module}  = $pm_info->name;

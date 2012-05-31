@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '4.00';
+our $VERSION = '4.09';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -592,7 +592,7 @@ distribution's version, which is available as C<$dist_version>.
 =back
 
 It also peforms a L<BeforeRelease|Dist::Zilla::Role::BeforeRelease>
-check to ensure that the relase date in the changelog is not a single
+check to ensure that the release date in the changelog is not a single
 uppercase word.  (I set the date to NOT until I'm ready to release.)
 
 =for Pod::Loom-omit

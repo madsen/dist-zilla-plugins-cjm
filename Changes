@@ -1,5 +1,9 @@
 Revision history for Dist-Zilla-Plugins-CJM
 
+4.09   NOT
+	Dist::Zilla::Plugin::TemplateCJM
+	  - fix typo in documentation
+
 4.08   April 28, 2012
 	- no functional changes in this release, just improved docs
 

@@ -287,7 +287,9 @@ sub munge_file
   my $version = $pm_info->version
       or die "ERROR: Can't find version in $pmFile";
 
-  $self->log("$pmFile: VERSION $version") if $self->report_versions;
+  # level => 'debug' doesn't work here; see RT#77622:
+  my $log_method = ($self->report_versions ? 'log' : 'log_debug');
+  $self->$log_method("$pmFile: VERSION $version");
 
   $dataRef->{version} = "$version";
   $dataRef->{module}  = $pm_info->name;

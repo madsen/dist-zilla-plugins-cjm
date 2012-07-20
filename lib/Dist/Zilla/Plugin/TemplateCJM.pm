@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '4.09';
+our $VERSION = '4.10';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -432,9 +432,12 @@ It returns a string like:
   List::Util
   Moose                   0.90
 
-If C<perl> is one of he dependencies, it is listed first.  All other
-dependencies are listed in ASCIIbetical order.  The string will NOT
-end with a newline.
+If C<perl> is one of the dependencies, it is listed first.  Also, its
+version (if >= 5.6.0) will be normalized into double-decimal form,
+even if the prerequisites list it as floating point.
+
+All other dependencies are listed in ASCIIbetical order.  The string
+will NOT end with a newline.
 
 If there are no dependencies, the string C<None.> will be returned.
 
@@ -444,13 +447,22 @@ sub dependency_list
 {
   my ($self) = @_;
 
-  my $requires = $self->zilla->distmeta->{prereqs}{runtime}{requires};
+  my %requires = %{ $self->zilla->distmeta->{prereqs}{runtime}{requires} };
 
-  my @modules = sort grep { $_ ne 'perl' } keys %$requires;
+  my @modules = sort grep { $_ ne 'perl' } keys %requires;
 
-  unshift @modules, 'perl' if $requires->{perl};
+  if ($requires{perl}) {
+    unshift @modules, 'perl';
+    # Standardize Perl version number:
+    require version;  version->VERSION(0.77);
+    (my $v = $requires{perl}) =~ s/_//g;
+    $v = version->parse($v);
+    $requires{perl} = $v->normal if $v >= 5.006;
+  } # end if minimum Perl version
 
   return 'None.' unless @modules;
+
+  s/^v// for values %requires;
 
   my $width = List::Util::max(6, map { length $_ } @modules) + 1;
 
@@ -460,7 +472,7 @@ sub dependency_list
   ++$width;
 
   foreach my $req (@modules) {
-    $text .= sprintf("  %-${width}s %s\n", $req, $requires->{$req} || '');
+    $text .= sprintf("  %-${width}s %s\n", $req, $requires{$req} || '');
   }
 
   $text =~ s/\s+\z//;           # Remove final newline

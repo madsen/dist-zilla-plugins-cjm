@@ -3,6 +3,11 @@ Revision history for Dist-Zilla-Plugins-CJM
 Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
+4.10   NOT
+	Dist::Zilla::Plugin::TemplateCJM
+	  - normalize Perl version in dependency_list
+	  - remove leading "v" from versions in dependency_list
+
 4.09   June 4, 2012
 	Dist::Zilla::Plugin::TemplateCJM
 	  - add report_versions parameter

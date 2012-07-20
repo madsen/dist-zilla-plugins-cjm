@@ -21,6 +21,8 @@ copyright_holder = E. Xavier Ample
 [Prereqs]
 Foo::Bar = 1.00
 Bloofle  = 0
+Baz      = v1.2.3
+perl     = 5.008
 END START
 
   $ini . join('', map { "$_\n" } @_);
@@ -93,6 +95,8 @@ DEPENDENCIES
 
   Package   Minimum Version
   --------- ---------------
+  perl       5.8.0
+  Baz        1.2.3
   Bloofle
   Foo::Bar   1.00
 END DEPEND

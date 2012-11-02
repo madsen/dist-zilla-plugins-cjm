@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::MakeMaker::Custom;
 # ABSTRACT: Allow a dist to have a custom Makefile.PL
 #---------------------------------------------------------------------
 
-our $VERSION = '4.08';
+our $VERSION = '4.11';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DEPENDENCIES
@@ -181,10 +181,32 @@ In your F<Makefile.PL>:
 
   ##{ $share_dir_code{preamble} || '' ##}
 
-  WriteMakefile(
+  my %args = (
     NAME => "My::Module",
+  ##{ $plugin->get_default(qw(ABSTRACT AUTHOR LICENSE VERSION)) ##}
   ##{ $plugin->get_prereqs ##}
   );
+
+  unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
+    my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
+    my $pp = $WriteMakefileArgs{PREREQ_PM};
+    for my $mod ( keys %$br ) {
+      if ( exists $pp->{$mod} ) {
+        $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
+      }
+      else {
+        $pp->{$mod} = $br->{$mod};
+      }
+    }
+  }
+
+  delete $args{CONFIGURE_REQUIRES}
+    unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
+  delete $args{LICENSE}
+    unless eval { ExtUtils::MakeMaker->VERSION(6.31) };
+
+  WriteMakefile(%args);
 
   ##{ $share_dir_code{postamble} || '' ##}
 

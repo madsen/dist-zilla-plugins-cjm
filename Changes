@@ -3,7 +3,9 @@ Revision history for Dist-Zilla-Plugins-CJM
 Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
-4.11   NOT
+4.11   November 3, 2012
+	- no functional changes in this release, just improved docs
+
 	Dist::Zilla::Plugin::MakeMaker::Custom
 	  - expand SYNOPSIS to show more complete example
 	  - add documentation about combining with AutoPrereqs

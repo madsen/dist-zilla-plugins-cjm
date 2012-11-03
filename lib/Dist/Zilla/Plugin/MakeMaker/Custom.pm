@@ -290,6 +290,33 @@ The Dist::Zilla object that is creating the distribution.
 
 =back
 
+=head2 Using MakeMaker::Custom with AutoPrereqs
+
+If you are using the L<AutoPrereqs|Dist::Zilla::Plugin::AutoPrereqs>
+plugin, then you will probably want to set its C<configure_finder> to
+a FileFinder that includes F<Makefile.PL>.  You may also want to set
+this plugin's C<eumm_version> parameter to 0 and allow AutoPrereqs to
+get the version from your S<C<use ExtUtils::MakeMaker>> line.
+
+Example F<dist.ini> configuration:
+
+  [MakeMaker::Custom]
+  eumm_version = 0 ; AutoPrereqs gets actual version from Makefile.PL
+
+  [FileFinder::ByName / :MakefilePL]
+  file = Makefile.PL
+
+  [AutoPrereqs]
+  :version = 4.300005 ; need configure_finder
+  configure_finder = :MakefilePL
+  ; Add next line if your Makefile.PL uses modules you ship in inc/
+  configure_finder = :IncModules
+
+Then in your F<Makefile.PL> you'd say:
+
+  use ExtUtils::MakeMaker 6.32; # or whatever version you need
+
+
 =head1 INCOMPATIBILITIES
 
 You must not use this in conjunction with the

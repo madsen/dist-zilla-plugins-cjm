@@ -6,6 +6,10 @@ which it was last changed.
 4.11   NOT
 	Dist::Zilla::Plugin::MakeMaker::Custom
 	  - expand SYNOPSIS to show more complete example
+	  - add documentation about combining with AutoPrereqs
+
+	Dist::Zilla::Plugin::ModuleBuild::Custom
+	  - add documentation about combining with AutoPrereqs
 
 4.10   August 3, 2012
 	Dist::Zilla::Plugin::TemplateCJM

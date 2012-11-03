@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::ModuleBuild::Custom;
 # ABSTRACT: Allow a dist to have a custom Build.PL
 #---------------------------------------------------------------------
 
-our $VERSION = '4.07';
+our $VERSION = '4.11';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DEPENDENCIES
@@ -274,6 +274,33 @@ The distribution's version number.
 The Dist::Zilla object that is creating the distribution.
 
 =back
+
+=head2 Using ModuleBuild::Custom with AutoPrereqs
+
+If you are using the L<AutoPrereqs|Dist::Zilla::Plugin::AutoPrereqs>
+plugin, then you will probably want to set its C<configure_finder> to
+a FileFinder that includes F<Build.PL>.  You may also want to set
+this plugin's C<mb_version> parameter to 0 and allow AutoPrereqs to
+get the version from your S<C<use Module::Build>> line.
+
+Example F<dist.ini> configuration:
+
+  [ModuleBuild::Custom]
+  mb_version = 0 ; AutoPrereqs gets actual version from Build.PL
+
+  [FileFinder::ByName / :BuildPL]
+  file = Build.PL
+
+  [AutoPrereqs]
+  :version = 4.300005 ; need configure_finder
+  configure_finder = :BuildPL
+  ; Add next line if your Build.PL uses modules you ship in inc/
+  configure_finder = :IncModules
+
+Then in your F<Build.PL> you'd say:
+
+  use Module::Build 0.28; # or whatever version you need
+
 
 =head1 INCOMPATIBILITIES
 

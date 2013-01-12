@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::TemplateCJM;
 # ABSTRACT: Process templates, including version numbers & changes
 #---------------------------------------------------------------------
 
-our $VERSION = '4.10';
+our $VERSION = '4.12';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -284,15 +284,21 @@ sub munge_file
   my $pmFile  = $file->name;
   my $pm_info = $self->get_module_info($file);
 
-  my $version = $pm_info->version
-      or die "ERROR: Can't find version in $pmFile";
+  my $version = $pm_info->version;
+
+  if (not $version and $pmFile =~ m!^lib/(.+)\.pod$!) {
+    ($dataRef->{module} = $1) =~ s!/!::!g;
+    $version = $dataRef->{dist_version};
+  }
+
+  die "ERROR: Can't find version in $pmFile" unless $version;
 
   # level => 'debug' doesn't work here; see RT#77622:
   my $log_method = ($self->report_versions ? 'log' : 'log_debug');
   $self->$log_method("$pmFile: VERSION $version");
 
   $dataRef->{version} = "$version";
-  $dataRef->{module}  = $pm_info->name;
+  $dataRef->{module}  = $pm_info->name || $dataRef->{module};
   $dataRef->{pm_info} = \$pm_info;
 
   $parmsRef->{FILENAME} = $pmFile;
@@ -601,6 +607,9 @@ Each section may use the same variables as step 2, plus the following:
 =item C<$module>
 
 The name of the module being processed (i.e., its package).
+In the case of a pure-POD file without a C<package> declaration,
+this is derived from its filename (which must match the regex
+C<^lib/(.+)\.pod$>).
 
 =item C<$pm_info>
 
@@ -611,6 +620,8 @@ module.  (Note that the filename in C<$pm_info> will not be correct.)
 
 The module's version number.  This may be different than the
 distribution's version, which is available as C<$dist_version>.
+In the case of a pure-POD file without a C<$VERSION> declaration,
+this will be the same as C<$dist_version>.
 
 =back
 

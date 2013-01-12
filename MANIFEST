@@ -7,6 +7,7 @@ Makefile.PL
 README
 Template_strict.patch
 corpus/DZT/README
+corpus/DZT/lib/DZT/Manual.pod
 corpus/DZT/lib/DZT/Sample.pm
 corpus/DZT/t/basic.t
 corpus/README

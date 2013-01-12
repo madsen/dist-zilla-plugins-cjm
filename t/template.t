@@ -3,7 +3,7 @@
 
 use strict;
 use warnings;
-use Test::More 0.88 tests => 6; # done_testing
+use Test::More 0.88 tests => 7; # done_testing
 
 use Test::DZil 'Builder';
 
@@ -137,6 +137,14 @@ END CHANGES
     make_re("DZT::Sample requires L<Bloofle> and\n".
             "L<Foo::Bar> (1.00 or later).\n"),
     'POD in module',
+  );
+
+  my $manual = $tzil->slurp_file('build/lib/DZT/Manual.pod');
+
+  like(
+    $manual,
+    qr{^\QThis document (DZT::Manual) describes DZT-Sample 0.04.\E\n}m,
+    'VERSION in manual',
   );
 }
 

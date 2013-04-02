@@ -96,7 +96,8 @@ sub new_tzil
   # Something about the copy dzil makes seems to confuse git into
   # thinking files are modified when they aren't.
   # Run "git reset --mixed" in the source directory to unconfuse it:
-  Git::Wrapper->new( $tzil->tempdir->subdir("source") )->reset('--mixed');
+  Git::Wrapper->new( $tzil->tempdir->subdir("source")->stringify )
+              ->reset('--mixed');
 
   $tzil;
 } # end new_tzil

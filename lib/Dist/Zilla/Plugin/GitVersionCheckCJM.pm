@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::GitVersionCheckCJM;
 # ABSTRACT: Ensure version numbers are up-to-date
 #---------------------------------------------------------------------
 
-our $VERSION = '4.03';
+our $VERSION = '4.13';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -78,7 +78,7 @@ sub munge_files {
   my ($self) = @_;
 
   # Get the released versions:
-  my $git = Git::Wrapper->new( $self->zilla->root );
+  my $git = Git::Wrapper->new( $self->zilla->root->stringify );
 
   my %released = map { /^v?([\d._]+)$/ ? ($1, 1) : () } $git->tag;
 

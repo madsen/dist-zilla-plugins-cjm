@@ -34,6 +34,9 @@ version          = 0.04
 Foo::Bar = 1.00
 Bloofle  = 0
 
+[Prereqs / TestRequires]
+Test::More = 0.88
+
 [GatherDir]
 [ModuleBuild::Custom]
 mb_version = 0.3601
@@ -65,7 +68,8 @@ END BUILD
 
   my $build_requires = <<'END BUILD_REQUIRES';
   'build_requires' => {
-    'Module::Build' => '0.3601'
+    'Module::Build' => '0.3601',
+    'Test::More' => '0.88'
   },
 END BUILD_REQUIRES
 

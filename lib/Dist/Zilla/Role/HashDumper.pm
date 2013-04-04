@@ -17,7 +17,7 @@ package Dist::Zilla::Role::HashDumper;
 # ABSTRACT: Dump selected hash keys as a string
 #---------------------------------------------------------------------
 
-our $VERSION = '4.03';
+our $VERSION = '4.13';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 use Moose::Role;
@@ -74,7 +74,8 @@ sub hash_as_string
   my $string = $plugin->extract_keys($name, \%hash, @keys);
   eval "%new_hash = ($string);";
 
-This constructs a string of properly quoted keys and values from a
+This combines C<extract_keys_as_hash> and C<hash_as_string>.
+It constructs a string of properly quoted keys and values from
 selected keys in a hash.  (Note that C<\%hash> is a reference, but
 C<@keys> is not.)  The C<$name> is used only in a log_debug message.
 
@@ -85,6 +86,27 @@ string is returned.  Otherwise, the result always ends with a comma.
 =cut
 
 sub extract_keys
+{
+  my $self = shift;
+
+  return $self->hash_as_string( $self->extract_keys_as_hash(@_) );
+} # end extract_keys
+
+=method extract_keys_as_hash
+
+  my $hashref = $plugin->extract_keys_as_hash($name, \%hash, @keys);
+
+This constructs a hashref from from selected keys in a hash.  (Note
+that C<\%hash> is a reference, but C<@keys> is not.)  The C<$name> is
+used only in a log_debug message.
+
+If any key has no value (or its value is an empty hash or array ref)
+it will be omitted from the new hashref.  If all keys are omitted,
+an empty hashref is returned.
+
+=cut
+
+sub extract_keys_as_hash
 {
   my $self = shift;
   my $type = shift;
@@ -106,8 +128,8 @@ sub extract_keys
     $want{$key} = $hash->{$key};
   } # end foreach $key
 
-  return $self->hash_as_string(\%want);
-} # end _extract_keys
+  return \%want;
+} # end extract_keys_as_hash
 
 no Moose::Role;
 1;

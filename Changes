@@ -3,7 +3,7 @@ Revision history for Dist-Zilla-Plugins-CJM
 Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
-4.13   NOT
+4.13   April 4, 2013
 	Dist::Zilla::Plugin::GitVersionCheckCJM
 	  - fix compatibility with Git::Wrapper 0.028_96
 	    (Don't pass Path::Class objects to Git::Wrapper)

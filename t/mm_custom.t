@@ -14,6 +14,9 @@ sub make_re
 
   $text =~ s/\\\n/ *\n/g;
 
+  # Accept either '0' or 0 in prereqs:
+  $text =~ s/(\\'0\\')/(?:$1|0)/g;
+
   qr/^$text/m;
 } # end make_re
 

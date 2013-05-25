@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::ModuleBuild::Custom;
 # ABSTRACT: Allow a dist to have a custom Build.PL
 #---------------------------------------------------------------------
 
-our $VERSION = '4.11';
+our $VERSION = '4.15';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DEPENDENCIES
@@ -98,21 +98,54 @@ sub get_meta
 
 =method get_prereqs
 
-  $plugin->get_prereqs
+  $plugin->get_prereqs($api_version)
+
+This returns all the keys that describe the distribution's
+prerequisites.  The C<$api_version> indicates what keys
+the template can handle.  The currently defined values are:
+
+=over 8
+
+=item C<0> (or undef)
 
 This is equivalent to
 
   $plugin->get_meta(qw(build_requires configure_requires requires
                        recommends conflicts))
 
-In other words, it returns all the keys that describe the
-distribution's prerequisites.
+=item C<1>
+
+This adds C<test_requires> as a separate key (which requires
+Dist::Zilla 4.300032 or later).  It's equivalent to
+
+  $plugin->get_default(qw(build_requires configure_requires requires
+                          test_requires recommends conflicts))
+
+Your F<Build.PL> should either require Module::Build 0.4004, or
+fold test_requires into build_requires if an older version is used (as
+shown in the SYNOPSIS).
+
+=back
 
 =cut
 
 sub get_prereqs
 {
-  shift->get_meta(qw(build_requires configure_requires requires recommends
+  my ($self, $api_version) = @_;
+
+  if ($api_version) {
+    $self->log_fatal("api_version $api_version is not supported")
+        unless $api_version == 1;
+    local $@;
+    $self->log(["WARNING: Dist::Zilla %s does not support api_version %d",
+                Dist::Zilla->VERSION, $api_version ])
+        unless eval { Dist::Zilla::Plugin::MakeMaker->VERSION( 4.300032 ) };
+
+    return $self->get_default(qw(build_requires configure_requires requires
+                                 test_requires recommends conflicts));
+  }
+
+  $self->get_meta(qw(build_requires configure_requires requires recommends
                      conflicts));
 } # end get_prereqs
 
@@ -212,11 +245,26 @@ In your F<Build.PL>:
 
   use Module::Build;
 
-  my $builder = Module::Build->new(
+  my %module_build_args = (
     module_name => 'Foo::Bar',
-  ##{ $plugin->get_prereqs ##}
+  ##{ $plugin->get_prereqs(1) ##}
   ##{ $plugin->get_default('share_dir') ##}
   );
+
+  unless ( eval { Module::Build->VERSION(0.4004) } ) {
+    my $tr = delete $module_build_args{test_requires};
+    my $br = $module_build_args{build_requires};
+    for my $mod ( keys %$tr ) {
+      if ( exists $br->{$mod} ) {
+        $br->{$mod} = $tr->{$mod} if $tr->{$mod} > $br->{$mod};
+      }
+      else {
+        $br->{$mod} = $tr->{$mod};
+      }
+    }
+  }
+
+  my $builder = Module::Build->new(%module_build_args);
   $builder->create_build_script;
 
 Of course, your F<Build.PL> should be more complex than that, or you
@@ -259,7 +307,7 @@ The hash of metadata (in META 1.4 format) that will be stored in F<META.yml>.
 
 =item C<$meta2>
 
-The hash of metadata (in META 2 format) that will be stored in F<META.yml>.
+The hash of metadata (in META 2 format) that will be stored in F<META.json>.
 
 =item C<$plugin>
 

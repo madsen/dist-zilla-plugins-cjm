@@ -4,6 +4,9 @@ Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
 4.15   NOT
+	Dist::Zilla::Plugin::MakeMaker::Custom
+	  - clarify that get_prereqs(1) requires Dist::Zilla 4.300032
+
 	Dist::Zilla::Plugin::ModuleBuild::Custom
 	  - add $api_version parameter to get_prereqs method
 

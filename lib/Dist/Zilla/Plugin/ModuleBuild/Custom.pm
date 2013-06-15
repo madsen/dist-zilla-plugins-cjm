@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::ModuleBuild::Custom;
 # ABSTRACT: Allow a dist to have a custom Build.PL
 #---------------------------------------------------------------------
 
-our $VERSION = '4.15';
+our $VERSION = '4.16';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DEPENDENCIES
@@ -139,7 +139,7 @@ sub get_prereqs
     local $@;
     $self->log(["WARNING: Dist::Zilla %s does not support api_version %d",
                 Dist::Zilla->VERSION, $api_version ])
-        unless eval { Dist::Zilla::Plugin::MakeMaker->VERSION( 4.300032 ) };
+        unless eval { Dist::Zilla::Plugin::ModuleBuild->VERSION( 4.300032 ) };
 
     return $self->get_default(qw(build_requires configure_requires requires
                                  test_requires recommends conflicts));

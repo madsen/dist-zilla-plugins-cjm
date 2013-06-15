@@ -3,6 +3,10 @@ Revision history for Dist-Zilla-Plugins-CJM
 Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
+4.16   NOT
+	Dist::Zilla::Plugin::ModuleBuild::Custom
+	  - fix spurious warning when using get_prereqs(1)
+
 4.15   May 25, 2013
 	Dist::Zilla::Plugin::MakeMaker::Custom
 	  - clarify that get_prereqs(1) requires Dist::Zilla 4.300032

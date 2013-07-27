@@ -17,7 +17,7 @@ package Dist::Zilla::Role::ModuleInfo;
 # ABSTRACT: Create Module::Metadata object from Dist::Zilla::File
 #---------------------------------------------------------------------
 
-our $VERSION = '4.00';
+our $VERSION = '4.17';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 use Moose::Role;
@@ -71,8 +71,8 @@ sub get_module_info
   print $temp $file->content;
   close $temp;
 
-  return Module::Metadata->new_from_file("$tempname", @_)
-      or die "Unable to get module info from " . $file->name . "\n";
+  return(Module::Metadata->new_from_file("$tempname", @_)
+         or die "Unable to get module info from " . $file->name . "\n");
 } # end get_module_info
 
 no Moose::Role;

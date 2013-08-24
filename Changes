@@ -3,7 +3,7 @@ Revision history for Dist-Zilla-Plugins-CJM
 Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
-4.20   NOT
+4.20   2013-08-24
 	[TemplateCJM]
 	  - now distributed separately (no longer part of this dist)
 

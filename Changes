@@ -4,247 +4,247 @@ Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
 4.20   NOT
-	Dist::Zilla::Plugin::TemplateCJM
+	[TemplateCJM]
 	  - now distributed separately (no longer part of this dist)
 
-4.17   July 26, 2013
-	Dist::Zilla::Role::ModuleInfo
+4.17   2013-07-26
+	[=Dist::Zilla::Role::ModuleInfo]
 	  - die if Module::Metadata constructor fails (RT#87277)
 
-4.16   June 15, 2013
-	Dist::Zilla::Plugin::ModuleBuild::Custom
+4.16   2013-06-15
+	[ModuleBuild::Custom]
 	  - fix spurious warning when using get_prereqs(1)
 
-4.15   May 25, 2013
-	Dist::Zilla::Plugin::MakeMaker::Custom
+4.15   2013-05-25
+	[MakeMaker::Custom]
 	  - clarify that get_prereqs(1) requires Dist::Zilla 4.300032
 
-	Dist::Zilla::Plugin::ModuleBuild::Custom
+	[ModuleBuild::Custom]
 	  - add $api_version parameter to get_prereqs method
 
-4.14   May 18, 2013
+4.14   2013-05-18
 	- no functional changes in this release, just improved tests
 	- make mb_custom.t & mm_custom.t more flexible about version '0'
 
-4.13   April 4, 2013
-	Dist::Zilla::Plugin::GitVersionCheckCJM
+4.13   2013-04-04
+	[GitVersionCheckCJM]
 	  - fix compatibility with Git::Wrapper 0.028_96
 	    (Don't pass Path::Class objects to Git::Wrapper)
 
-	Dist::Zilla::Plugin::MakeMaker::Custom
+	[MakeMaker::Custom]
 	  - fix compatibility with Dist::Zilla 4.300032
 	  - add $api_version parameter to get_prereqs method
 
-	Dist::Zilla::Role::HashDumper
+	[=Dist::Zilla::Role::HashDumper]
 	  - add extract_keys_as_hash method
 
-4.12   January 12, 2013
-	Dist::Zilla::Plugin::TemplateCJM
+4.12   2013-01-12
+	[TemplateCJM]
 	  - handle pure-POD files without package declaration or $VERSION
 	    (Must be named *.pod and found in lib/ directory.)
 
-4.11   November 3, 2012
+4.11   2012-11-03
 	- no functional changes in this release, just improved docs
 
-	Dist::Zilla::Plugin::MakeMaker::Custom
+	[MakeMaker::Custom]
 	  - expand SYNOPSIS to show more complete example
 	  - add documentation about combining with AutoPrereqs
 
-	Dist::Zilla::Plugin::ModuleBuild::Custom
+	[ModuleBuild::Custom]
 	  - add documentation about combining with AutoPrereqs
 
-4.10   August 3, 2012
-	Dist::Zilla::Plugin::TemplateCJM
+4.10   2012-08-03
+	[TemplateCJM]
 	  - normalize Perl version in dependency_list
 	  - remove leading "v" from versions in dependency_list
 
-4.09   June 4, 2012
-	Dist::Zilla::Plugin::TemplateCJM
+4.09   2012-06-04
+	[TemplateCJM]
 	  - add report_versions parameter
 
-4.08   April 28, 2012
+4.08   2012-04-28
 	- no functional changes in this release, just improved docs
 
-	Dist::Zilla::Plugin::MakeMaker::Custom
+	[MakeMaker::Custom]
 	  - document how it compares to the MakeMaker::Awesome plugin
 
-4.07   February 22, 2012
-	Dist::Zilla::Plugin::MakeMaker::Custom
+4.07   2012-02-22
+	[MakeMaker::Custom]
 	  - now compatible with (and requires) Dist::Zilla 4.300009
 	    %share_dir_code replaces @share_dir_block in templates
 	  - fix typo in documentation
 
-	Dist::Zilla::Plugin::ModuleBuild::Custom
+	[ModuleBuild::Custom]
 	  - fix typo in documentation
 
-4.06   January 2, 2012
-	Dist::Zilla::Plugin::RecommendedPrereqs
+4.06   2012-01-02
+	[RecommendedPrereqs]
 	  - use CPAN::Meta::Requirements (new name of Version::Requirements)
 
-4.05   December 21, 2011
-	Dist::Zilla::Plugin::RecommendedPrereqs
+4.05   2011-12-21
+	[RecommendedPrereqs]
 	  - Filter runtime recommendations out of test recommendations
 
-4.04   December 12, 2011
-	Dist::Zilla::Plugin::Test::PrereqsFromMeta
+4.04   2011-12-12
+	[Test::PrereqsFromMeta]
 	  - New plugin
 
-4.03   November 11, 2011
-	Dist::Zilla::Plugin::GitVersionCheckCJM
+4.03   2011-11-11
+	[GitVersionCheckCJM]
 	  - Add :IncModules & :ExecFiles to default finders
 
-	Dist::Zilla::Plugin::MakeMaker::Custom
+	[MakeMaker::Custom]
 	  - New plugin
 
-	Dist::Zilla::Role::HashDumper
+	[=Dist::Zilla::Role::HashDumper]
 	  - New role
 
-4.02   November 3, 2011
+4.02   2011-11-03
 	- Fixed the bogus failures in gitvercheck.t
 	- No changes to plugins
 
-4.01   November 2, 2011
+4.01   2011-11-02
 	- Fixed buggy diagnostics in gitvercheck.t
 	- No changes to plugins
 
-4.00   November 1, 2011
-	Dist::Zilla::Plugin::RecommendedPrereqs
+4.00   2011-11-01
+	[RecommendedPrereqs]
 	  - New plugin
 
-	Dist::Zilla::Plugin::TemplateCJM
+	[TemplateCJM]
 	  - Add changelog_re parameter
 
 	- Tests now use Test::DZil
 
-3.05   May 5, 2011
-	Dist::Zilla::Plugin::GitVersionCheckCJM
+3.05   2011-05-05
+	[GitVersionCheckCJM]
 	  - Log more information in debug mode
 	  - Tests now output the log on failure
 
-	Dist::Zilla::Plugin::ModuleBuild::Custom
+	[ModuleBuild::Custom]
 	  - Added get_default method
 
-	Dist::Zilla::Plugin::TemplateCJM
+	[TemplateCJM]
 	  - Fix dependency_list to handle no dependencies
 
-3.04   December 20, 2010
-	Dist::Zilla::Role::ModuleInfo
+3.04   2010-12-20
+	[=Dist::Zilla::Role::ModuleInfo]
 	  - Use Module::Metadata instead of Module::Build::ModuleInfo
 	  - Locally reset $/ $, $\ to default values (just in case)
 
-	Dist::Zilla::Plugin::TemplateCJM
+	[TemplateCJM]
 	  - Updated docs to talk about Module::Metadata
 
-3.03   December 7, 2010
-	Dist::Zilla::Plugin::Metadata
+3.03   2010-12-07
+	[Metadata]
 	  - New plugin
 
-	Dist::Zilla::Plugin::TemplateCJM
+	[TemplateCJM]
 	  - Only process comments that contain a {{ }} pair.
 	    Text::Template breaks on strings that have the closing
 	    delimiter without the opening one.
 
-3.02   November 11, 2010
+3.02   2010-11-11
 	- Fixed test prerequisites (needed Test::More 0.88)
 
-	Dist::Zilla::Plugin::GitVersionCheckCJM
+	[GitVersionCheckCJM]
 	  - Use Git::Wrapper instead of Git (RT#60140)
 	  - Complain if a module's version exceeds the dist's version
 	  - Indicate when the dist's version needs to be incremented
 	  - Now has tests
 
-3.01   August 9, 2010
-	Dist::Zilla::Plugin::ArchiveRelease
+3.01   2010-08-09
+	[ArchiveRelease]
 	  - Use File::Copy::move to support cross-filesystem moves (RT#59288)
 
-	Dist::Zilla::Plugin::ModuleBuild::Custom
+	[ModuleBuild::Custom]
 	  - Now compatible with Dist::Zilla 3 & 4
 	  - Now has tests
 
-3.00   May 22, 2010
+3.00   2010-05-22
 	- Now requires Dist::Zilla 3
 
-	Dist::Zilla::Plugin::TemplateCJM
+	[TemplateCJM]
 	  - Now compatible with Dist::Zilla 3
 
-0.09   April 15, 2010
-	Dist::Zilla::Plugin::ArchiveRelease
+0.09   2010-04-15
+	[ArchiveRelease]
 	  - accept ~ in directory to mean home directory (RT#56433)
 
-0.08   April 14, 2010
+0.08   2010-04-14
 	- This distribution is now Dist-Zilla-Plugins-CJM.
 	  Dist-Zilla-PluginBundle-CJM now contains only @CJM (and
 	  requires this distribution along with the other plugins used
 	  by @CJM).
 	- Updated all version numbers to 0.08
 
-	Dist::Zilla::Plugin::ArchiveRelease
+	[ArchiveRelease]
 	  - document the FilePruner role
 
-	Dist::Zilla::Plugin::PodLoom
+	[PodLoom]
 	  - now distributed separately, in Dist-Zilla-Plugin-PodLoom
 
-	Dist::Zilla::Plugin::TemplateCJM
+	[TemplateCJM]
 	  - added build_instructions method
 	  - In templates, $changes no longer ends with a newline
 
-0.07   April 1, 2010
+0.07   2010-04-01
 	- added tests
 
-0.06   April 1, 2010
-	Dist::Zilla::Plugin::ArchiveRelease
+0.06   2010-04-01
+	[ArchiveRelease]
 	  - add FilePruner for archive directory (Michael Schout)
 
-	Dist::Zilla::Plugin::GitVersionCheckCJM
-	Dist::Zilla::Plugin::TemplateCJM
+	[GitVersionCheckCJM]
+	[TemplateCJM]
 	  - are now FileFinderUsers
 
-0.05   March 30, 2010
+0.05   2010-03-30
 	- All plugins now have a SYNOPSIS
 	- Revised compile tests
 
-0.04   March 29, 2010
+0.04   2010-03-29
 	- Now requires Dist::Zilla 2
 	- Added compile tests
 
-	Dist::Zilla::Plugin::ArchiveRelease
+	[ArchiveRelease]
 	  - Added a BeforeRelease check to ensure the directory exists
 	    (creating it if necessary) and this release hasn't already
 	    been archived
 
-0.03   March 15, 2010
+0.03   2010-03-15
 	- Includes a new version of Template_strict.patch that
 	  supports scalar references properly
 
-	Dist::Zilla::Plugin::ArchiveRelease
+	[ArchiveRelease]
 	  - Shortened log message
 
-	Dist::Zilla::Plugin::ModuleBuild::Custom
+	[ModuleBuild::Custom]
 	  - New plugin
 
-	Dist::Zilla::Plugin::TemplateCJM
+	[TemplateCJM]
 	  - Is now an InstallTool instead of a FileMunger, because
 	    prerequisites have not been calculated at FileMunger time
 	  - Added the dependency_link & dependency_list methods
 	  - Added a BeforeRelease check to ensure the release date is
 	    not just an uppercase word
 
-0.02   March 7, 2010
+0.02   2010-03-07
 	- Added POD tests
 	- Use the plugin's log method so the plugin name appears in the log
 
-	Dist::Zilla::Plugin::ArchiveRelease
-	Dist::Zilla::Plugin::GitVersionCheckCJM
+	[ArchiveRelease]
+	[GitVersionCheckCJM]
 	  - New plugins
 
-	Dist::Zilla::Plugin::PodLoom
+	[PodLoom]
 	  - Define abstract, module, & version only if they
 	    could be determined
 
-	Dist::Zilla::Plugin::TemplateCJM
+	[TemplateCJM]
 	  - Also process comments that start at beginning of line
 
-0.01   October 11, 2009
+0.01   2009-10-11
 	- Initial release includes:
 	    Dist::Zilla::Plugin::PodLoom
 	    Dist::Zilla::Plugin::TemplateCJM

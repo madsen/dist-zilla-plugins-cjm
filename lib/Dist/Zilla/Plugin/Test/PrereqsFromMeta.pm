@@ -18,7 +18,7 @@ package Dist::Zilla::Plugin::Test::PrereqsFromMeta;
 #---------------------------------------------------------------------
 
 use 5.008;
-our $VERSION = '4.04';
+our $VERSION = '4.20';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -126,6 +126,7 @@ TEST: {
 
     while (<META>) {
       last if /^\s*\},?\s*\z/;
+      next if /^\s*"[^"]+"\s*:\s*\{\s*\},?\s*\z/;
       ok(/^\s*"(.+)" : \{\s*\z/, "found relationship $phase $1") or last TEST;
       my $rel = $1;
 

@@ -7,6 +7,9 @@ which it was last changed.
 	[TemplateCJM]
 	  - now distributed separately (no longer part of this dist)
 
+	[Test::PrereqsFromMeta]
+	  - Handle an empty hash in prerequisites
+
 4.17   2013-07-26
 	[=Dist::Zilla::Role::ModuleInfo]
 	  - die if Module::Metadata constructor fails (RT#87277)

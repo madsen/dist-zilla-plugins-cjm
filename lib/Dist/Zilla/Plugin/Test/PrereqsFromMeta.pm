@@ -18,7 +18,7 @@ package Dist::Zilla::Plugin::Test::PrereqsFromMeta;
 #---------------------------------------------------------------------
 
 use 5.008;
-our $VERSION = '4.20';
+our $VERSION = '4.21';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -138,7 +138,10 @@ TEST: {
 
         next if $phase ne 'runtime' or $prereq eq 'perl';
 
-        my $loaded = eval "require $prereq; $prereq->VERSION($version); 1";
+        # Need a special case for if.pm, because "require if;" is a syntax error.
+        my $loaded = ($prereq eq 'if')
+            ? eval "require '$prereq.pm'; '$prereq'->VERSION($version); 1"
+            : eval "require $prereq; $prereq->VERSION($version); 1";
         if ($rel eq 'requires') {
           ok($loaded, "loaded $prereq $version")
               or printf STDERR "\n#    Got: %s %s\n# Wanted: %s %s\n",

@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::RecommendedPrereqs;
 # ABSTRACT: Look for comments recommending prerequisites
 #---------------------------------------------------------------------
 
-our $VERSION = '4.06';
+our $VERSION = '4.21';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -94,6 +94,7 @@ sub register_prereqs
     my $files = $self->$method;
 
     foreach my $file (@$files) {
+      $self->log_debug("Checking " . $file->name);
       my $content = $file->content;
 
       while ($content =~ /^ [ \t]* \# [ \t]* (RECOMMEND|SUGGEST) [ \t]+ PREREQ:

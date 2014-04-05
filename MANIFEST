@@ -15,6 +15,7 @@ corpus/archives/DZT-Sample-0.01.tar.gz
 corpus/archives/DZT-Sample-0.02.tar.gz
 corpus/archives/DZT-Sample-0.03.tar.gz
 corpus/gitvercheck.git
+corpus/latin1/lib/EncTest.pm
 lib/Dist/Zilla/Plugin/ArchiveRelease.pm
 lib/Dist/Zilla/Plugin/GitVersionCheckCJM.pm
 lib/Dist/Zilla/Plugin/MakeMaker/Custom.pm

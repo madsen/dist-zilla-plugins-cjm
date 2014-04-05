@@ -17,7 +17,7 @@ package Dist::Zilla::Role::ModuleInfo;
 # ABSTRACT: Create Module::Metadata object from Dist::Zilla::File
 #---------------------------------------------------------------------
 
-our $VERSION = '4.17';
+our $VERSION = '4.22';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 use Moose::Role;
@@ -67,8 +67,8 @@ sub get_module_info
   # Module::Metadata only cares about the basename of the file:
   my $tempname = $dir->file($modPath->basename);
 
-  open(my $temp, '>', $tempname);
-  print $temp $file->content;
+  open(my $temp, '>:raw', $tempname);
+  print $temp Dist::Zilla->VERSION < 5 ? $file->content : $file->encoded_content;
   close $temp;
 
   return(Module::Metadata->new_from_file("$tempname", @_)

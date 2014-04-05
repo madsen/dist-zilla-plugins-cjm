@@ -3,6 +3,10 @@ Revision history for Dist-Zilla-Plugins-CJM
 Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
+4.22   NOT
+	[=Dist::Zilla::Role::ModuleInfo]
+	  - Use encoded_content with Dist::Zilla 5 (RT#94145)
+
 4.21   2014-02-22
 	[RecommendedPrereqs]
 	  - Debug log each file scanned (turn on with dzil -v)

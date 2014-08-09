@@ -7,6 +7,7 @@ which it was last changed.
 	[Test::PrereqsFromMeta]
 	  - Make insufficient version just a warning instead of a failure
 	  - Allow undefined version to fulfill prerequisite version 0
+	  - Dump all of %INC if run with -v or --verbose option
 
 4.22   2014-04-05
 	[=Dist::Zilla::Role::ModuleInfo]

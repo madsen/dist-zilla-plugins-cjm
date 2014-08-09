@@ -39,6 +39,10 @@ In addition, if C<AUTOMATED_TESTING> is set, it dumps out every module
 in C<%INC> along with its version.  This can help you determine the
 cause of failures reported by CPAN Testers.
 
+You can also get the version dump by running F<t/00-all_prereqs.t> with
+the C<-v> or C<--verbose> option.  (This is not the same as passing
+the C<-v> option to C<prove>.)
+
 =cut
 
 use Moose;
@@ -162,7 +166,8 @@ TEST: {
   close META;
 
   # Print version of all loaded modules:
-  if ($ENV{AUTOMATED_TESTING}) {
+  if ($ENV{AUTOMATED_TESTING} or
+      (@ARGV and ($ARGV[0] eq '-v' or $ARGV[0] eq '--verbose'))) {
     print STDERR "# Listing %INC\n";
 
     my @packages = grep { s/\.pm\Z// and do { s![\\/]!::!g; 1 } } sort keys %INC;

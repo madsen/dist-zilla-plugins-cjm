@@ -3,7 +3,7 @@ Revision history for Dist-Zilla-Plugins-CJM
 Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
-4.23   NOT
+4.23   2014-08-16
 	[Test::PrereqsFromMeta]
 	  - Make insufficient version just a warning instead of a failure
 	  - Allow undefined version to fulfill prerequisite version 0

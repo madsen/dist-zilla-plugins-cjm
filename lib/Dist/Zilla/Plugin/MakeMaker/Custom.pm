@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::MakeMaker::Custom;
 # ABSTRACT: Allow a dist to have a custom Makefile.PL
 #---------------------------------------------------------------------
 
-our $VERSION = '4.15';
+our $VERSION = '4.24';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DEPENDENCIES
@@ -253,7 +253,7 @@ In your F<Makefile.PL>:
         $br->{$mod} = $tr->{$mod};
       }
     }
-  }
+  } # end unless ExtUtils::MakeMaker is 6.63_03 or newer
 
   unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
     my $br = delete $args{BUILD_REQUIRES};
@@ -266,7 +266,7 @@ In your F<Makefile.PL>:
         $pp->{$mod} = $br->{$mod};
       }
     }
-  }
+  } # end unless ExtUtils::MakeMaker is 6.56 or newer
 
   delete $args{CONFIGURE_REQUIRES}
     unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
@@ -278,8 +278,14 @@ In your F<Makefile.PL>:
 
   ##{ $share_dir_code{postamble} || '' ##}
 
-Of course, your F<Makefile.PL> should be more complex than that, or you
-don't need this plugin.
+Of course, your F<Makefile.PL> doesn't need to look exactly like this.
+If you increase the minimum version of ExtUtils::MakeMaker, you can
+remove any C<unless eval> sections whose version test is less than or
+equal to C<eumm_version>.  If you're not using C<share_dir>,
+you can remove those lines.
+
+And if you're not adding your own code to F<Makefile.PL>,
+you don't need this plugin.
 
 =head1 DESCRIPTION
 

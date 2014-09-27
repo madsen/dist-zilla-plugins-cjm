@@ -22,84 +22,84 @@ which it was last changed.
 
 4.20   2013-08-24
 	[TemplateCJM]
-	  - now distributed separately (no longer part of this dist)
+	  - Now distributed separately (no longer part of this dist)
 
 	[Test::PrereqsFromMeta]
 	  - Handle an empty hash in prerequisites
 
 4.17   2013-07-26
 	[=Dist::Zilla::Role::ModuleInfo]
-	  - die if Module::Metadata constructor fails (RT#87277)
+	  - Die if Module::Metadata constructor fails (RT#87277)
 
 4.16   2013-06-15
 	[ModuleBuild::Custom]
-	  - fix spurious warning when using get_prereqs(1)
+	  - Fix spurious warning when using get_prereqs(1)
 
 4.15   2013-05-25
 	[MakeMaker::Custom]
-	  - clarify that get_prereqs(1) requires Dist::Zilla 4.300032
+	  - Clarify that get_prereqs(1) requires Dist::Zilla 4.300032
 
 	[ModuleBuild::Custom]
-	  - add $api_version parameter to get_prereqs method
+	  - Add $api_version parameter to get_prereqs method
 
 4.14   2013-05-18
-	- no functional changes in this release, just improved tests
-	- make mb_custom.t & mm_custom.t more flexible about version '0'
+	- No functional changes in this release, just improved tests
+	- Make mb_custom.t & mm_custom.t more flexible about version '0'
 
 4.13   2013-04-04
 	[GitVersionCheckCJM]
-	  - fix compatibility with Git::Wrapper 0.028_96
+	  - Fix compatibility with Git::Wrapper 0.028_96
 	    (Don't pass Path::Class objects to Git::Wrapper)
 
 	[MakeMaker::Custom]
-	  - fix compatibility with Dist::Zilla 4.300032
-	  - add $api_version parameter to get_prereqs method
+	  - Fix compatibility with Dist::Zilla 4.300032
+	  - Add $api_version parameter to get_prereqs method
 
 	[=Dist::Zilla::Role::HashDumper]
-	  - add extract_keys_as_hash method
+	  - Add extract_keys_as_hash method
 
 4.12   2013-01-12
 	[TemplateCJM]
-	  - handle pure-POD files without package declaration or $VERSION
+	  - Handle pure-POD files without package declaration or $VERSION
 	    (Must be named *.pod and found in lib/ directory.)
 
 4.11   2012-11-03
-	- no functional changes in this release, just improved docs
+	- No functional changes in this release, just improved docs
 
 	[MakeMaker::Custom]
-	  - expand SYNOPSIS to show more complete example
-	  - add documentation about combining with AutoPrereqs
+	  - Expand SYNOPSIS to show more complete example
+	  - Add documentation about combining with AutoPrereqs
 
 	[ModuleBuild::Custom]
-	  - add documentation about combining with AutoPrereqs
+	  - Add documentation about combining with AutoPrereqs
 
 4.10   2012-08-03
 	[TemplateCJM]
-	  - normalize Perl version in dependency_list
-	  - remove leading "v" from versions in dependency_list
+	  - Normalize Perl version in dependency_list
+	  - Remove leading "v" from versions in dependency_list
 
 4.09   2012-06-04
 	[TemplateCJM]
-	  - add report_versions parameter
+	  - Add report_versions parameter
 
 4.08   2012-04-28
-	- no functional changes in this release, just improved docs
+	- No functional changes in this release, just improved docs
 
 	[MakeMaker::Custom]
-	  - document how it compares to the MakeMaker::Awesome plugin
+	  - Document how it compares to the MakeMaker::Awesome plugin
 
 4.07   2012-02-22
 	[MakeMaker::Custom]
-	  - now compatible with (and requires) Dist::Zilla 4.300009
+	  - Now compatible with (and requires) Dist::Zilla 4.300009
 	    %share_dir_code replaces @share_dir_block in templates
-	  - fix typo in documentation
+	  - Fix typo in documentation
 
 	[ModuleBuild::Custom]
-	  - fix typo in documentation
+	  - Fix typo in documentation
 
 4.06   2012-01-02
 	[RecommendedPrereqs]
-	  - use CPAN::Meta::Requirements (new name of Version::Requirements)
+	  - Use CPAN::Meta::Requirements (new name of Version::Requirements)
 
 4.05   2011-12-21
 	[RecommendedPrereqs]
@@ -189,7 +189,7 @@ which it was last changed.
 
 0.09   2010-04-15
 	[ArchiveRelease]
-	  - accept ~ in directory to mean home directory (RT#56433)
+	  - Accept ~ in directory to mean home directory (RT#56433)
 
 0.08   2010-04-14
 	- This distribution is now Dist-Zilla-Plugins-CJM.
@@ -199,25 +199,25 @@ which it was last changed.
 	- Updated all version numbers to 0.08
 
 	[ArchiveRelease]
-	  - document the FilePruner role
+	  - Document the FilePruner role
 
 	[PodLoom]
-	  - now distributed separately, in Dist-Zilla-Plugin-PodLoom
+	  - Now distributed separately, in Dist-Zilla-Plugin-PodLoom
 
 	[TemplateCJM]
-	  - added build_instructions method
+	  - Added build_instructions method
 	  - In templates, $changes no longer ends with a newline
 
 0.07   2010-04-01
-	- added tests
+	- Added tests
 
 0.06   2010-04-01
 	[ArchiveRelease]
-	  - add FilePruner for archive directory (Michael Schout)
+	  - Add FilePruner for archive directory (Michael Schout)
 
 	[GitVersionCheckCJM]
 	[TemplateCJM]
-	  - are now FileFinderUsers
+	  - Are now FileFinderUsers
 
 0.05   2010-03-30
 	- All plugins now have a SYNOPSIS

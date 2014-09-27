@@ -3,7 +3,9 @@ Revision history for Dist-Zilla-Plugins-CJM
 Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
-4.24   NOT
+4.24   2014-09-27
+	- No functional changes in this release, just improved docs
+
 	[MakeMaker::Custom]
 	  - Clarify that not all the boilerplate is required
 

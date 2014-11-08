@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::ModuleBuild::Custom;
 # ABSTRACT: Allow a dist to have a custom Build.PL
 #---------------------------------------------------------------------
 
-our $VERSION = '4.24';
+our $VERSION = '4.25';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 DEPENDENCIES
@@ -184,6 +184,8 @@ sub get_default
 
   return $self->extract_keys(module_build => $self->_default_mb_args, @_);
 } # end get_default
+
+sub add_file {}                 # Don't let parent class add any files
 
 #---------------------------------------------------------------------
 sub setup_installer
@@ -370,6 +372,7 @@ F<Makefile.PL> (if you prefer L<ExtUtils::MakeMaker>).
 CONFIGURATION AND ENVIRONMENT
 
 =for Pod::Coverage
+add_file
 prune_files
 setup_installer
 template_error

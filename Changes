@@ -3,6 +3,10 @@ Revision history for Dist-Zilla-Plugins-CJM
 Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
+4.25   NOT
+	[ModuleBuild::Custom]
+	  - Fix compatibility with Dist::Zilla 5.022
+
 4.24   2014-09-27
 	- No functional changes in this release, just improved docs
 

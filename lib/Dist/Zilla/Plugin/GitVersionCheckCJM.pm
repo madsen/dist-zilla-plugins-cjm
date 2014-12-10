@@ -37,7 +37,6 @@ allow people who don't use Git to use the other plugins.)
 
 use version 0.77 ();
 use Moose;
-use Moose::Autobox;
 with(
   'Dist::Zilla::Role::FileMunger',
   'Dist::Zilla::Role::ModuleInfo',
@@ -95,7 +94,7 @@ sub munge_files {
 
   # Check each module:
   my $errors = 0;
-  foreach my $file ($files->flatten) {
+  foreach my $file (@{ $files }) {
     ++$errors if $self->munge_file($file, $git, \%modified, \%released);
   } # end foreach $file
 

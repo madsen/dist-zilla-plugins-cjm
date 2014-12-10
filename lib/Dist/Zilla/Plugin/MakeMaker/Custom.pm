@@ -30,11 +30,12 @@ will help catch errors in your templates.
 =cut
 
 use Moose;
-use Moose::Autobox;
 use Dist::Zilla::Plugin::MakeMaker 4.300009; # improved subclassing
 extends 'Dist::Zilla::Plugin::MakeMaker';
 with qw(Dist::Zilla::Role::FilePruner
         Dist::Zilla::Role::HashDumper);
+
+use List::Util ();
 
 # We're trying to make the template executable before it's filled in,
 # so we want delimiters that look like comments:
@@ -169,7 +170,8 @@ around setup_installer => sub {
   my $orig = shift;
   my $self = shift;
 
-  my $file = $self->zilla->files->grep(sub { $_->name eq 'Makefile.PL' })->head
+  my $file = List::Util::first { $_->name eq 'Makefile.PL' }
+             @{ $self->zilla->files }
       or $self->log_fatal("No Makefile.PL found in dist");
 
   my $write_makefile_args = $self->_mmc_write_makefile_args;

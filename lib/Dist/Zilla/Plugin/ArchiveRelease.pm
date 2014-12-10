@@ -43,7 +43,6 @@ including the archived releases in future builds.
 =cut
 
 use Moose;
-use Moose::Autobox;
 with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::Releaser';
 with 'Dist::Zilla::Role::FilePruner';

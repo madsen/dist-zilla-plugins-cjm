@@ -3,6 +3,12 @@ Revision history for Dist-Zilla-Plugins-CJM
 Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
+4.26   NOT
+	- Don't use Moose::Autobox (GitHub#3: Thanks, Olivier Mengué)
+	  Dist::Zilla doesn't use it anymore, so it's an extra prerequisite.
+	  This affects ArchiveRelease, GitVersionCheckCJM, MakeMaker::Custom,
+	  and ModuleBuild::Custom, but their behavior should not have changed.
+
 4.25   2014-11-08
 	[ModuleBuild::Custom]
 	  - Fix compatibility with Dist::Zilla 5.022

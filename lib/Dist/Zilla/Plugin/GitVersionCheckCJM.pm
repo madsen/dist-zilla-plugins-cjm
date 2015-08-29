@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::GitVersionCheckCJM;
 # ABSTRACT: Ensure version numbers are up-to-date
 #---------------------------------------------------------------------
 
-our $VERSION = '4.26';
+our $VERSION = '4.27';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -51,7 +51,20 @@ This FileFinder provides the list of modules that will be checked.
 The default is C<:InstallModules>.  The C<finder> attribute may be
 listed any number of times.
 
+=attr single_version
+
+If set to a true value, all modules in the distribution must have
+the distribution's version.  The default is false, which allows
+unchanged modules to retain the version of the distribution in which
+they were last changed.
+
 =cut
+
+has single_version => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
 
 # RECOMMEND PREREQ: Git::Wrapper
 use Git::Wrapper ();            # AutoPrereqs skips this
@@ -127,6 +140,13 @@ sub munge_file
   # If the module version is greater than the dist version, that's a problem:
   if ($version > $distver) {
     $self->log("ERROR: $pmFile: $version exceeds dist version $distver");
+    return 1;
+  }
+
+  # If all modules must have the same version,
+  # and the module version is less than the dist version, that's a problem:
+  if ($self->single_version and $version < $distver) {
+    $self->log("ERROR: $pmFile: $version needs to be updated");
     return 1;
   }
 

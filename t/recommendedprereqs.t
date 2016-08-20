@@ -22,21 +22,28 @@ $tzil->build;
 
 my $meta = Parse::CPAN::Meta->load_file($tzil->tempdir->file('build/META.yml'));
 
-is_deeply(
-  $meta->{prereqs}{runtime}{recommends},
-  { 'Foo::Bar' => '1.00',
-    'Foo::Baz' => 0 },
-  'runtime recommends'
-);
+SKIP: {
+  my $ver = $meta->{'meta-spec'}{version};
+  unless ($ver >= 2) {
+    skip "CPAN::Meta::Spec version $ver < 2.x", 4;
+  }
 
-is($meta->{prereqs}{runtime}{suggests}, undef, 'runtime suggests');
-
-is($meta->{prereqs}{test}{recommends}, undef, 'test recommends');
-
-is_deeply(
-  $meta->{prereqs}{test}{suggests},
-  { 'Test::Other' => 0 },
-  'test suggests'
-);
+  is_deeply(
+    $meta->{prereqs}{runtime}{recommends},
+    { 'Foo::Bar' => '1.00',
+      'Foo::Baz' => 0 },
+    'runtime recommends'
+  );
+  
+  is($meta->{prereqs}{runtime}{suggests}, undef, 'runtime suggests');
+  
+  is($meta->{prereqs}{test}{recommends}, undef, 'test recommends');
+  
+  is_deeply(
+    $meta->{prereqs}{test}{suggests},
+    { 'Test::Other' => 0 },
+    'test suggests'
+  );
+}
 
 done_testing;

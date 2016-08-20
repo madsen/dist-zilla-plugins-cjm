@@ -3,7 +3,8 @@
 
 use strict;
 use warnings;
-use Test::More 0.88 tests => 4; # done_testing
+use version;
+use Test::More 0.88;
 
 use Test::DZil qw(Builder simple_ini);
 use Parse::CPAN::Meta;
@@ -22,12 +23,10 @@ $tzil->build;
 
 my $meta = Parse::CPAN::Meta->load_file($tzil->tempdir->file('build/META.yml'));
 
-SKIP: {
-  my $ver = $meta->{'meta-spec'}{version};
-  unless ($ver >= 2) {
-    skip "CPAN::Meta::Spec version $ver < 2.x", 4;
-  }
+my $ver = version->new($meta->{'meta-spec'}{version});
+diag "CPAN::Meta::Spec = $ver";
 
+if ($ver >= version->new('2')) { # See CPAN::Meta::Spec
   is_deeply(
     $meta->{prereqs}{runtime}{recommends},
     { 'Foo::Bar' => '1.00',
@@ -44,6 +43,17 @@ SKIP: {
     { 'Test::Other' => 0 },
     'test suggests'
   );
+} elsif ($ver >= version->new('1.4')) { 
+  is_deeply(
+    $meta->{recommends},
+    {
+      'Foo::Bar' => '1.00',
+      'Foo::Baz' => 0,
+    },
+    'runtime recommends'
+  );
+} else {
+  plan skip_all => "Unexpected CPAN::Meta::Spec version '$ver'";
 }
 
 done_testing;

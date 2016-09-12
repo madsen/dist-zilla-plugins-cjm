@@ -7,20 +7,21 @@ use Test::More 0.88 tests => 4; # done_testing
 
 use Test::DZil qw(Builder simple_ini);
 use Parse::CPAN::Meta;
+use Path::Tiny qw/path/;
 
 my $tzil = Builder->from_config(
   { dist_root => 'corpus/DZT' },
   {
     add_files => {
       'source/dist.ini' => simple_ini(qw(GatherDir RecommendedPrereqs),
-                                      [ MetaYAML => { version => 2 }]),
+                                      [ MetaJSON => { version => 2 }]),
     },
   },
 );
 
 $tzil->build;
 
-my $meta = Parse::CPAN::Meta->load_file($tzil->tempdir->file('build/META.yml'));
+my $meta = Parse::CPAN::Meta->load_file(path($tzil->tempdir)->child('build/META.json'));
 
 is_deeply(
   $meta->{prereqs}{runtime}{recommends},

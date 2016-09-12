@@ -47,7 +47,7 @@ with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::Releaser';
 with 'Dist::Zilla::Role::FilePruner';
 
-use Path::Class ();
+use Path::Tiny ();
 #---------------------------------------------------------------------
 
 =attr directory
@@ -87,7 +87,7 @@ sub directory
     $self->_set_directory($dir);
   } # end if $dir begins with ~
 
-  Path::Class::dir($dir)->absolute($self->zilla->root);
+  Path::Tiny::path($dir)->absolute($self->zilla->root)->stringify;
 } # end get_directory
 
 #---------------------------------------------------------------------
@@ -112,7 +112,7 @@ sub prune_files
   my $self = shift;
 
   my $root = $self->zilla->root;
-  my $dir  = $self->directory;
+  my $dir  = Path::Tiny::path($self->directory);
 
   if ($root->subsumes($dir)) {
     $dir      = $dir->relative($root);
@@ -129,7 +129,7 @@ sub before_release
 {
   my ($self, $tgz) = @_;
 
-  my $dir = $self->directory;
+  my $dir  = Path::Tiny::path($self->directory);
 
   # If the directory doesn't exist, create it:
   unless (-d $dir) {
@@ -140,7 +140,7 @@ sub before_release
   }
 
   # If the tarball has already been archived, abort:
-  my $file = $dir->file($tgz->basename);
+  my $file = $dir->child($tgz->basename);
 
   $self->log_fatal($self->pretty_path($file) . " already exists")
       if -e $file;
@@ -155,7 +155,7 @@ sub release
 
   chmod(0444, $tgz);
 
-  my $dest = $self->directory->file($tgz->basename);
+  my $dest = Path::Tiny::path($self->directory)->child($tgz->basename);
   my $destR = $self->pretty_path($dest);
 
   require File::Copy;

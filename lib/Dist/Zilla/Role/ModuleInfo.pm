@@ -25,7 +25,7 @@ use Moose::Role;
 use autodie ':io';
 use File::Temp 0.19 ();         # need newdir
 use Module::Metadata ();
-use Path::Class qw(dir file);
+use Path::Tiny qw(path);
 
 =head1 DEPENDENCIES
 
@@ -61,11 +61,11 @@ sub get_module_info
   # so we'll write the current contents to a temporary file:
 
   my $tempdirObject = File::Temp->newdir();
-  my $dir     = dir("$tempdirObject");
-  my $modPath = file($file->name);
+  my $dir     = path("$tempdirObject");
+  my $modPath = path($file->name);
 
   # Module::Metadata only cares about the basename of the file:
-  my $tempname = $dir->file($modPath->basename);
+  my $tempname = $dir->child($modPath->basename);
 
   open(my $temp, '>:raw', $tempname);
   print $temp Dist::Zilla->VERSION < 5 ? $file->content : $file->encoded_content;

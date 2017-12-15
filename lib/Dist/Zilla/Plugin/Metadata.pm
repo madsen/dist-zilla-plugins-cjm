@@ -76,7 +76,9 @@ sub BUILDARGS
 sub mvp_multivalue_args
 {
   return qw(author keywords license no_index.file no_index.directory
-            no_index.package no_index.namespace resources.license );
+            no_index.package no_index.namespace resources.license
+            x_contributors
+  );
 } # end mvp_multivalue_args
 
 #=====================================================================

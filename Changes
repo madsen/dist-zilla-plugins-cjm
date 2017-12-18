@@ -3,7 +3,7 @@ Revision history for Dist-Zilla-Plugins-CJM
 Note: the version number of a plugin is the version of the dist in
 which it was last changed.
 
-6.000  NOT
+6.000  2017-12-17
 	- Updates for Dist::Zilla 6
 
 	[ArchiveRelease]

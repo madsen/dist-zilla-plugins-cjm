@@ -1,7 +1,7 @@
 #---------------------------------------------------------------------
 package Dist::Zilla::Plugin::Metadata;
 #
-# Copyright 2010 Christopher J. Madsen
+# Copyright 2017 Christopher J. Madsen
 #
 # Author: Christopher J. Madsen <perl@cjmweb.net>
 # Created:  2 Dec 2010
@@ -17,7 +17,7 @@ package Dist::Zilla::Plugin::Metadata;
 # ABSTRACT: Add arbitrary keys to distmeta
 #---------------------------------------------------------------------
 
-our $VERSION = '3.03';
+our $VERSION = '6.000';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -96,7 +96,8 @@ distribution's metadata.
 It splits each key on '.' and uses that as a multi-level hash key.  It
 doesn't try to do any validation; the MetaJSON or MetaYAML plugin will
 do that.  It does know which keys in the spec are List values; those
-keys can be repeated.
+keys can be repeated.  In addition, the custom key C<x_contributors>
+is treated as a List.
 
 =for Pod::Coverage
 mvp_multivalue_args

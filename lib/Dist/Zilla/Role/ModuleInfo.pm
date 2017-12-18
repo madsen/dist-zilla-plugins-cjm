@@ -17,7 +17,7 @@ package Dist::Zilla::Role::ModuleInfo;
 # ABSTRACT: Create Module::Metadata object from Dist::Zilla::File
 #---------------------------------------------------------------------
 
-our $VERSION = '4.22';
+our $VERSION = '6.000';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 use Moose::Role;
@@ -25,7 +25,7 @@ use Moose::Role;
 use autodie ':io';
 use File::Temp 0.19 ();         # need newdir
 use Module::Metadata ();
-use Path::Class qw(dir file);
+use Path::Tiny ();
 
 =head1 DEPENDENCIES
 
@@ -61,14 +61,14 @@ sub get_module_info
   # so we'll write the current contents to a temporary file:
 
   my $tempdirObject = File::Temp->newdir();
-  my $dir     = dir("$tempdirObject");
-  my $modPath = file($file->name);
+  my $dir     = Path::Tiny::path("$tempdirObject");
+  my $modPath = Path::Tiny::path($file->name);
 
   # Module::Metadata only cares about the basename of the file:
-  my $tempname = $dir->file($modPath->basename);
+  my $tempname = $dir->child($modPath->basename);
 
   open(my $temp, '>:raw', $tempname);
-  print $temp Dist::Zilla->VERSION < 5 ? $file->content : $file->encoded_content;
+  print $temp $file->encoded_content;
   close $temp;
 
   return(Module::Metadata->new_from_file("$tempname", @_)

@@ -18,7 +18,7 @@ package Dist::Zilla::Plugin::ArchiveRelease;
 #---------------------------------------------------------------------
 
 use 5.008;
-our $VERSION = '4.26';
+our $VERSION = '6.000';
 # This file is part of {{$dist}} {{$dist_version}} ({{$date}})
 
 =head1 SYNOPSIS
@@ -47,7 +47,7 @@ with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::Releaser';
 with 'Dist::Zilla::Role::FilePruner';
 
-use Path::Class ();
+use Path::Tiny ();
 #---------------------------------------------------------------------
 
 =attr directory
@@ -87,8 +87,8 @@ sub directory
     $self->_set_directory($dir);
   } # end if $dir begins with ~
 
-  Path::Class::dir($dir)->absolute($self->zilla->root);
-} # end get_directory
+  Path::Tiny::path($dir)->absolute($self->zilla->root);
+} # end directory
 
 #---------------------------------------------------------------------
 # Format a path for display:
@@ -140,7 +140,7 @@ sub before_release
   }
 
   # If the tarball has already been archived, abort:
-  my $file = $dir->file($tgz->basename);
+  my $file = $dir->child($tgz->basename);
 
   $self->log_fatal($self->pretty_path($file) . " already exists")
       if -e $file;
@@ -155,7 +155,7 @@ sub release
 
   chmod(0444, $tgz);
 
-  my $dest = $self->directory->file($tgz->basename);
+  my $dest = $self->directory->child($tgz->basename);
   my $destR = $self->pretty_path($dest);
 
   require File::Copy;
